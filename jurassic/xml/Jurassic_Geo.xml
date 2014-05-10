@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE glossary SYSTEM "grammar.dtd">
+<glossary name="Jurassic Geo">
+  <tag glossary="Jurassic"/>
+  <thing>
+    <of type="Canvas">
+      <is>
+        <of type="Panel"/>
+      </is>
+    </of>
+  </thing>
+  <thing>
+    <of type="Shape"/>
+    <has name="draw" use="family" access="thing" change="can">
+      <plan>
+      </plan>
+    </has>
+  </thing>
+</glossary>

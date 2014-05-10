@@ -1,0 +1,44 @@
+add game title to definition data
+
+add game properties to definition data
+
+separate game state from game context / model
+
+Game context as domain root
+
+general refactoring to remove repeditive code
+
+Object builders --> Constructors
+
+split out into mvc
+
+pull ui out of html and into js view
+
+menues --> view
+
+event reactions --> controller
+
+context --> model
+
+event reactions in the controller need to be altered to 
+be more explicitely defined in the menu definition data
+
+bring log statements into classes
+
+"View Player" --> Sprite.toString
+
+Item --> Artifact
+
+Spell --> Skill
+
+"View Item" --> Artifact.toString
+
+"Read Spell" --> Skill.toString
+
+Cast spell should take an enemy as a second param,
+and contain all of the decision logic
+
+Stats should be definable in data:
+	one per each of [persist, attack, defend]
+	other stats may be added as tallies to be used
+		as cost for skills

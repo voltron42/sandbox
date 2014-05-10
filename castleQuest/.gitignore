@@ -1,0 +1,23 @@
+# Commonly ignored extensions #
+*.class
+*.tmp
+*.bak
+*.swp
+*~
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# generated folders #
+bin/
+classes/
+build/
+
+# Gradle files #
+.gradle/
+
+# Windows stuff #
+Thumbs.db 
+Desktop.ini

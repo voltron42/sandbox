@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE glossary SYSTEM "grammar.dtd">
+<glossary name="Hello World">
+  <tag glossary="Jurassic Base"/>
+  <plan>
+    <steps>
+      <act>
+        <to>
+          <simple value="window"/>
+        </to>
+        <do>
+          <simple value="write"/>
+        </do>
+        <with name="text">
+          <simple value="Hello World!"/>
+        </with>
+      </act>
+    </steps>
+  </plan>
+</glossary>

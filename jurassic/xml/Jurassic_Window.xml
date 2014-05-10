@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE glossary SYSTEM "grammar.dtd">
+<glossary name="Jurassic Window">
+  <tag glossary="Jurassic"/>
+  <thing>
+    <of type="Panel">
+      <of type="Thing"/>
+    </of>
+    <has name="write" use="all" access="thing" change="can">
+      <plan>
+        <parts>
+          <take name="statement">
+            <of type="Text"/>
+          </take>
+        </parts>
+        <native/>
+      </plan>
+    </has>
+    <has name="getX" use="all" access="type" change="can">
+      <plan>
+        <parts>
+          <give>
+            <of type="Integer"/>
+          </give>
+        </parts>
+        <native/>
+      </plan>
+    </has>
+    <has name="getY" use="all" access="type" change="can">
+      <plan>
+        <parts>
+          <give>
+            <of type="Integer"/>
+          </give>
+        </parts>
+        <native/>
+      </plan>
+    </has>
+  </thing>
+  <thing>
+    <of type="Window">
+      <is>
+        <of type="Panel"/>
+      </is>
+    </of>
+  </thing>
+</glossary>

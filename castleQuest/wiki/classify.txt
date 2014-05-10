@@ -1,0 +1,75 @@
+"Classify" is a JavaScript extension for creating classical inheritance behavior 
+in JavaScript.
+
+[See it here at GitHub!](https://github.com/voltron42/castleQuest/blob/master/util/Classify.js)
+
+The "Classify" function acts as a class factory factory (yes, I typed "factory"
+twice deliberately).  This function takes an object ("root") and a string 
+("namespace") as optional parameters and returns a function which acts as a class 
+factory which will create classes in the given namespace in the given root 
+(or in 'window' if root is undefined).
+
+    var classFactory = Classify();//builds classes directly in 'window'
+    
+    var localClasses = {};
+    var localClassFactory = Classify(localClasses);
+    //builds classes in the "localClasses" object
+    //if this is encapsulated in a function, these classes would then be private
+
+The class factory function takes builds classes from constructors.  It takes as 
+required parameters a string "className" and a constructor function, and as 
+optional parameters another constructor function and a third function which is not 
+a constructor and which will takes as a parameter an array and returns an array.
+
+    classFactory('Person',function(firstName,lastName){
+        this.getFirstName = function(){
+            return firstName;
+        };
+        this.getLastName = function(){
+            return lastName;
+        };
+        this.getFullName = function(){
+            return this.getFirstName() + " " + this.getLastName();
+        };
+        this.toString = function(){
+            return this.getFullName();
+        };
+    });
+    //since 'firstName' and 'lastName' are local to the constructor, they are
+    //private within any given instance, making 'Person' virtually immutable.
+
+If only the first constructor function is passed, that constructor function is set
+to the property named as "className" in the appropriate location.  If the second
+constructor is passed in, the first constructor will be treated as the superclass
+for the second constructor.  The third function is passed if the parameters for the 
+subclass constructor need to be altered to fit the superclass constructor.
+
+    //Person is the constructor created above
+    classFactory('Employee',Person,function(firstName,lastName,employeeId){
+        this.getEmployeeID = function(){
+            return employeeId;
+        };
+        this.toString = function(){
+            return this.getEmployeeID() + "(" + this._super() + ")";
+        };
+    });
+
+Within the subclass constructor, new methods may be added and existing methods may
+be overridden.  Overridden methods may access their parent-class's counterpart
+by calling "this._super()".
+
+    var steve = new Person("Steve","Franks");
+    var tony = new Employee("Anthony","Daniels","C3P0");
+    console.log(steve+"");//logs "Steve Franks"
+    console.log(tony+"");//logs "C3P0 (Anthony Daniels)"
+    console.log(steve instanceof Person);//logs true;
+    console.log(tony instanceof Employee);//logs true;
+    console.log(tony instanceof Person);//logs true;
+
+Classify creates and uses classes defined by constructor functions which allows 
+these classes to have private members.  
+
+To give credit where credit is due:
+> the function inheritance / override portion was adapted from [John Resig's "Class.js"](http://ejohn.org/blog/simple-javascript-inheritance/)
+
+> the "objectBuilder" function was adapted from [a forum post on stack overflow](http://stackoverflow.com/questions/1606797/use-of-apply-with-new-operator-is-this-possible)

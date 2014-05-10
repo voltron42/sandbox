@@ -1,0 +1,26 @@
+Attacks should have two possible results: success or failure
+
+Items should have heft / weight, users are limited by capacity/strength/etc.
+
+other stats may be given a contributory effect:
+	altering the values of yet other stats through
+	user-defined calculations
+
+Skills should be 'learned' to bring them into a user's
+	skill base.
+
+Enemies should come with 'rewards'.
+
+Items and Skills should be able to affect multiple stats, 
+	both positively and negatively
+
+Items used in battle should take damage;
+	damage should reduce the power of an item.
+	
+Stats should also be able to be used comparatively:
+	player has a speed of 10, enemy speed 5: 
+		player gets 2 turns for enemy's 1
+	enemy has agility 12, player has agility 10: 
+		odds of enemy preventing player from running are 6/5
+		
+Terrain / level geography

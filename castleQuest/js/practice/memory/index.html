@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <title>CastleQuest</title>
+        <script type="text/javascript" src="../../util/DomFactory.js"></script>
+        <script type="text/javascript" src="memory.js"></script>
+        <style type="text/css">
+            .lock{
+                display: block;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="control">
+            <textarea class="lock" id="listInput" rows="5" cols="75"></textarea>
+            <label for="delim">Delimiter</label><input id="delim"/>
+            <label for="cover">Label</label><input id="cover"/>
+            <button class="lock" onclick="memory.go('table','control','listInput','delim','cover')">Go</button>
+        </div>
+        <pre id="table">
+        </pre>
+    </body>
+</html>

@@ -1,0 +1,32 @@
+<!ELEMENT glossary (tag*, (plan | thing), thing*)>
+<!ATTLIST glossary name CDATA #REQUIRED>
+<!ELEMENT tag EMPTY>
+<!ATTLIST tag glossary CDATA #REQUIRED>
+<!ELEMENT thing (of, series?, has*)>
+<!ELEMENT of (of*, is?)>
+<!ATTLIST of type CDATA #REQUIRED>
+<!ELEMENT is (of+)>
+<!ELEMENT series (member+)>
+<!ELEMENT member (with*)>
+<!ATTLIST member name CDATA #REQUIRED>
+<!ELEMENT has ((of,(simple|act)?)|plan)>
+<!ATTLIST has name CDATA #REQUIRED>
+<!ATTLIST has use (me|glossary|family|all) #REQUIRED>
+<!ATTLIST has access (thing|type) #REQUIRED>
+<!ATTLIST has change (can|cannot) #REQUIRED>
+<!ELEMENT simple EMPTY>
+<!ATTLIST simple value CDATA #REQUIRED>
+<!ELEMENT act (to, do, with*)>
+<!ELEMENT do (simple|act|plan)>
+<!ELEMENT to (simple|act|plan)>
+<!ELEMENT with (simple|act|plan)>
+<!ATTLIST with name CDATA #REQUIRED>
+<!ELEMENT plan (of*, parts?, (steps | native)?)>
+<!ELEMENT parts ((give|take), take*)>
+<!ELEMENT give (of, default?)>
+<!ELEMENT take (of, default?)>
+<!ATTLIST take name CDATA #REQUIRED>
+<!ELEMENT default (simple|act|plan)>
+<!ELEMENT steps (act*, (act|return))>
+<!ELEMENT return (simple|act|plan)>
+<!ELEMENT native EMPTY>

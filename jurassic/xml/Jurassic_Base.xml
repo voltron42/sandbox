@@ -1,0 +1,206 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE glossary SYSTEM "grammar.dtd">
+<glossary name="Jurassic Base">
+  <tag glossary="Jurassic"/>
+  <tag glossary="Jurassic Window"/>
+  <thing>
+    <of type="Jurassic"/>
+    <has name="window" use="all" access="type" change="cannot">
+      <of type="Window"/>
+    </has>
+    <has name="walk" use="all" access="type" change="cannot">
+      <plan>
+        <of type="#1"/>
+        <parts>
+          <take name="span">
+            <of type="Walkable">
+              <of type="#1"/>
+            </of>
+          </take>
+          <take name="callback">
+            <of type="Action">
+              <of type="Boolean"/>
+              <of type="#1"/>
+            </of>
+          </take>
+        </parts>
+        <native/>
+      </plan>
+    </has>
+    <has name="filterGroup" use="all" access="type" change="cannot">
+      <plan>
+        <of type="#1"/>
+        <of type="#2">
+          <is>
+            <of type="Group">
+              <of type="#1"/>
+            </of>
+          </is>
+        </of>
+        <parts>
+          <give>
+            <of type="#2"/>
+          </give>
+          <take name="span">
+            <of type="#2"/>
+          </take>
+          <take name="callback">
+            <of type="Action">
+              <of type="Boolean"/>
+              <of type="#1"/>
+            </of>
+          </take>
+        </parts>
+        <native/>
+      </plan>
+    </has>
+    <has name="filterIndex" use="all" access="type" change="cannot">
+      <plan>
+        <of type="#1"/>
+        <of type="#2"/>
+        <of type="#3"/>
+        <of type="#4">
+          <is>
+            <of type="Index">
+              <of type="#1"/>
+              <of type="#2">
+                <is>
+                  <of type="Walkable">
+                    <of type="#1"/>
+                  </of>
+                </is>
+              </of>
+              <of type="#3"/>
+            </of>
+          </is>
+        </of>
+        <parts>
+          <give>
+            <of type="#4"/>
+          </give>
+          <take name="span">
+            <of type="#4"/>
+          </take>
+          <take name="callback">
+            <of type="Action">
+              <of type="Boolean"/>
+              <of type="#1"/>
+              <of type="#3"/>
+            </of>
+          </take>
+        </parts>
+        <native/>
+      </plan>
+    </has>
+    <has name="mapGroup" use="all" access="type" change="cannot">
+      <plan>
+        <of type="#1"/>
+        <of type="#2">
+          <is>
+            <of type="Group">
+              <of type="#1"/>
+            </of>
+          </is>
+        </of>
+        <of type="#3"/>
+        <of type="#4">
+          <is>
+            <of type="Group">
+              <of type="#3"/>
+            </of>
+          </is>
+        </of>
+        <parts>
+          <give>
+            <of type="#4"/>
+          </give>
+          <take name="span">
+            <of type="#2"/>
+          </take>
+          <take name="callback">
+            <of type="Action">
+              <of type="#3"/>
+              <of type="#1"/>
+            </of>
+          </take>
+        </parts>
+        <native/>
+      </plan>
+    </has>
+    <has name="filterIndex" use="all" access="type" change="cannot">
+      <plan>
+        <of type="#1"/>
+        <of type="#2"/>
+        <of type="#3"/>
+        <of type="#4">
+          <is>
+            <of type="Index">
+              <of type="#1"/>
+              <of type="#2">
+                <is>
+                  <of type="Walkable">
+                    <of type="#1"/>
+                  </of>
+                </is>
+              </of>
+              <of type="#3"/>
+            </of>
+          </is>
+        </of>
+        <of type="#5"/>
+        <of type="#6">
+          <is>
+            <of type="Index">
+              <of type="#1"/>
+              <of type="#2">
+                <is>
+                  <of type="Walkable">
+                    <of type="#1"/>
+                  </of>
+                </is>
+              </of>
+              <of type="#5"/>
+            </of>
+          </is>
+        </of>
+        <parts>
+          <give>
+            <of type="#5"/>
+          </give>
+          <take name="span">
+            <of type="#4"/>
+          </take>
+          <take name="callback">
+            <of type="Action">
+              <of type="#5"/>
+              <of type="#1"/>
+              <of type="#3"/>
+            </of>
+          </take>
+        </parts>
+        <native/>
+      </plan>
+    </has>
+    <has name="if else"  use="all" access="type" change="cannot">
+      <plan>
+        <parts>
+          <take name="condition">
+            <of type="Action">
+              <of type="Boolean"/>
+            </of>
+          </take>
+          <take name="when true">
+            <of type="Action"/>
+          </take>
+          <take name="when false">
+            <of type="Action"/>
+          </take>
+        </parts>
+        <native/>
+      </plan>
+    </has> 
+  </thing>
+  <thing>
+    <of type="Math"/>
+  </thing>
+</glossary>

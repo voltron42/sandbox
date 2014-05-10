@@ -1,0 +1,359 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE glossary SYSTEM "grammar.dtd">
+<glossary name="Jurassic">
+  <thing>
+    <of type="Thing"/>
+    <has name="$" use="all" access="thing" change="can">
+      <!--
+      '$' denotes the current type
+      Since all types extend 'Thing', 
+      then this method will share the name of the type 
+      implementing it as well as it's return type.
+      -->
+      <plan>
+        <parts>
+          <give>
+            <of type="$"/>
+          </give>
+          <take name="pieces">
+            <of type="Lookup"/>
+          </take>
+          <take name="inner">
+            <of type="List"/>
+          </take>
+        </parts>
+        <native/>
+      </plan>
+    </has>
+    <has name="getType" use="all" access="thing" change="cannot">
+      <plan>
+        <parts>
+          <give>
+            <of type="Type"/>
+          </give>
+        </parts>
+        <native/>
+      </plan>
+    </has>
+  </thing>
+  <thing>
+    <of type="Nothing">
+      <is>
+        <of type="Thing"/>
+      </is>
+    </of>
+    <has name="INSTANCE" use="all" access="type" change="cannot">
+      <of type="?"/>
+    </has>
+  </thing>
+  <thing>
+    <of type="Boolean">
+      <is>
+        <of type="Thing"/>
+      </is>
+    </of>
+    <series>
+      <member name="TRUE"/>
+      <member name="FALSE"/>
+    </series>
+    <has name="asText" use="all" access="thing" change="cannot">
+      <plan>
+        <native/>
+      </plan>
+    </has>
+  </thing>
+  <thing>
+    <of type="Text">
+      <is>
+        <of type="Thing"/>
+      </is>
+    </of>
+  </thing>
+  <thing>
+    <of type="Number">
+      <is>
+        <of type="Thing"/>
+      </is>
+    </of>
+    <has name="asInteger" use="all" access="thing" change="can">
+      <plan>
+        <parts>
+          <give>
+            <of type="Integer"/>
+          </give>
+        </parts>
+      </plan>
+    </has>
+    <has name="asDecimal" use="all" access="thing" change="can">
+      <plan>
+        <parts>
+          <give>
+            <of type="Decimal"/>
+          </give>
+        </parts>
+      </plan>
+    </has>
+    <has name="asFraction" use="all" access="thing" change="can">
+      <plan>
+        <parts>
+          <give>
+            <of type="Fraction"/>
+          </give>
+        </parts>
+      </plan>
+    </has>
+    <has name="asText" use="all" access="thing" change="can">
+      <plan>
+        <parts>
+          <give>
+            <of type="Text"/>
+          </give>
+        </parts>
+      </plan>
+    </has>
+  </thing>
+  <thing>
+    <of type="Integer">
+      <is>
+        <of type="Thing"/>
+      </is>
+    </of>
+  </thing>
+  <thing>
+    <of type="Decimal">
+      <is>
+        <of type="Thing"/>
+      </is>
+    </of>
+  </thing>
+  <thing>
+    <of type="Fraction">
+      <is>
+        <of type="Thing"/>
+      </is>
+    </of>
+    <has name="numerator" access="thing" use="all" change="cannot">
+      <of type="Integer"/>
+    </has>
+    <has name="denominator" access="thing" use="all" change="cannot">
+      <of type="Integer"/>
+    </has>
+  </thing>
+  <thing>
+    <of type="Walker">
+      <of type="#1"/>
+    </of>
+    <has name="step" use="all" access="thing" change="can">
+      <plan>
+        <parts>
+          <give>
+            <of type="#1"/>
+          </give>
+        </parts>
+      </plan>
+    </has>
+    <has name="canStep" use="all" access="thing" change="can">
+      <plan>
+        <parts>
+          <give>
+            <of type="Boolean"/>
+          </give>
+        </parts>
+      </plan>
+    </has>
+  </thing>
+  <thing>
+    <of type="Walkable">
+      <of type="#1"/>
+    </of>
+    <has name="getWalker" use="all" access="thing" change="can">
+      <plan>
+        <parts>
+          <give>
+            <of type="Walker">
+              <of type="#1"/>
+            </of>
+          </give>
+        </parts>
+      </plan>
+    </has>
+  </thing>
+  <thing>
+    <of type="Range">
+      <of type="#1">
+        <is>
+          <of type="Number"/>
+        </is>
+      </of>
+      <is>
+        <of type="Walkable">
+          <of type="#1"/>
+        </of>
+      </is>
+    </of>
+  </thing>
+  <thing>
+    <of type="Group">
+      <of type="#1"/>
+      <is>
+        <of type="Walkable">
+          <of type="#1"/>
+        </of>
+      </is>
+    </of>
+    <has name="add" use="all" access="thing" change="can">
+      <plan>
+        <parts>
+          <take name="element">
+            <of type="#1"/>
+          </take>
+        </parts>
+      </plan>
+    </has>
+    <has name="remove" use="all" access="thing" change="can">
+      <plan>
+        <parts>
+          <take name="element">
+            <of type="#1"/>
+          </take>
+        </parts>
+      </plan>
+    </has>
+  </thing>
+  <thing>
+    <of type="Set">
+      <of type="#1"/>
+      <is>
+        <of type="Group">
+          <of type="#1"/>
+        </of>
+      </is>
+    </of>
+  </thing>
+  <thing>
+    <of type="Index">
+      <of type="#1"/>
+      <of type="#2">
+        <is>
+          <of type="Walkable">
+            <of type="#1"/>
+          </of>
+        </is>
+      </of>
+      <of type="#3"/>
+      <is>
+        <of type="Walkable">
+          <of type="#1"/>
+        </of>
+      </is>
+    </of>
+    <has name="get" use="all" access="thing" change="can">
+      <plan>
+        <parts>
+          <give>
+            <of type="#3"/>
+          </give>
+          <take name="key">
+            <of type="#1"/>
+          </take>
+        </parts>
+      </plan>
+    </has>
+    <has name="set" use="all" access="thing" change="can">
+      <plan>
+        <parts>
+          <take name="key">
+            <of type="#1"/>
+          </take>
+          <take name="value">
+            <of type="#3"/>
+          </take>
+        </parts>
+      </plan>
+    </has>
+  </thing>
+  <thing>
+    <of type="List">
+      <of type="#1"/>
+      <is>
+        <of type="Index">
+          <of type="Integer"/>
+          <of type="Range">
+            <of type="Integer"/>
+          </of>
+          <of type="#1"/>
+        </of>
+      </is>
+    </of>
+  </thing>
+  <thing>
+    <of type="Lookup">
+      <of type="#1"/>
+      <is>
+        <of type="Index">
+          <of type="String"/>
+          <of type="Set">
+            <of type="String"/>
+          </of>
+          <of type="#1"/>
+        </of>
+      </is>
+    </of>
+  </thing>
+  <thing>
+    <of type="Action">
+      <of type="*"/>
+      <is>
+        <of type="Thing"/>
+      </is>
+    </of>
+  </thing>
+  <thing>
+    <of type="Type">
+      <of type="#1"/>
+      <is>
+        <of type="Thing"/>
+      </is>
+    </of>
+    <has name="getName" use="all" access="thing" change="cannot">
+      <plan>
+        <parts>
+          <give>
+            <of type="Text"/>
+          </give>
+        </parts>
+      </plan>
+    </has>
+    <has name="getInnerTypeCount" use="family" access="thing" change="cannot">
+      <plan>
+        <parts>
+          <give>
+            <of type="Integer"/>
+          </give>
+        </parts>
+      </plan>
+    </has>
+    <has name="getInnerTypes" use="family" access="thing" change="cannot">
+      <plan>
+        <parts>
+          <give>
+            <of type="List">
+              <of type="Type"/>
+            </of>
+          </give>
+        </parts>
+      </plan>
+    </has>
+    <has name="getInnerTypes" use="family" access="thing" change="cannot">
+      <plan>
+        <parts>
+          <give>
+            <of type="List">
+              <of type="Text"/>
+            </of>
+          </give>
+        </parts>
+      </plan>
+    </has>
+  </thing>
+</glossary>

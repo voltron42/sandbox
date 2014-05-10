@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <title>Code Quiz</title>
+        <script type="text/javascript" src="test.js"></script>
+        <script type="text/javascript" src="bat.js"></script>
+        <script type="text/javascript">
+            function go(){
+                Quiz.launch(tests);
+            }
+        </script>
+    </head>
+    <body id="body" onload="go()">
+        <table>
+            <tr>
+                <td>
+                    <h1>Code Quiz</h1>
+                    <select id="category" onchange="Quiz.pickCategory()"><select>
+                    <p id="categoryDescription"></p>
+                    <select id="test" onchange="Quiz.pickTest()"><select>
+                    <p id="testDescription"></p>
+                    <ul id="sampleData"></ul>
+                    <button value="Run & Test" onclick="Quiz.runTests()"/>
+                    <textarea id="code"></textarea>
+                </td>
+                <td>
+                    <div id="results"></div>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

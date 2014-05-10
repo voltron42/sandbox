@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <title>CastleQuest</title>
+        <script type="text/javascript" src="../../../util/Collections.js"></script>
+        <script type="text/javascript" src="simple.js"></script>
+        <script type="text/javascript" src="engine.js"></script>
+        <style type="text/css">
+            .lock{
+                display: block;
+            }
+        </style>
+    </head>
+    <body onload="engine.init()">
+        <textarea class="lock" id="console" rows="20" cols="75" readonly="readonly"></textarea>
+        <div id="menuDiv">
+            <label for="menu">Menu</label>
+            <select id="menu" onclick="engine.pick()"></select>
+        </div>
+        <button class="lock" onclick="engine.go()">Go</button>
+    </body>
+</html>
