@@ -1,80 +1,113 @@
 Classify = function(){
 	var fnTest = /xyz/.test(function(){xyz;}) ? /\b_super\b/ : /.*/;
-	var objectBuilder = function(baseClass){
+	var objectBuilder = function(baseClass, superClassInstance){
 		var out = function(args){
 			return baseClass.apply(this,args);
 		};
-		out.prototype = baseClass.prototype;
+		out.prototype = superClassInstance || baseClass.prototype;
 		return out;
 	};
+	var instantiate = function(cls) {
+		return function(args) {
+			var obj = {};
+			cls.apply(obj,args);
+			return obj;
+		}
+	}
+	var appendStatics = function(cls, statics) {
+		if(statics){
+			var existingMembers = Object.keys(statics).filter(function(key) {
+				return typeof cls[key] != 'undefined';
+			}).map(function(key) {
+				return key;
+			});
+			if (existingMembers.length > 0) {
+				throw "Cannot add static members " + existingMembers + " to class " + className + ".";
+			}
+			Object.keys(statics).forEach(function(key) {
+				cls[key] = statics[key];
+			});
+		}
+	}
+	var defaultArgumentConverter = function() {
+		return arguments;
+	}
+	var inherit = function(_this,_super) {
+		return function(name) {
+			if(typeof _this[name] == "function" && typeof _super[name] == "function" && !fnTest.test(_this[name])){
+				_super[name] = _this[name];
+			}else if(!(name in _super) || typeof _super[name] != "function"){
+				this[name] = _this[name];
+			}
+		}
+	}
+	var inherit = function(_this,_super) {
+		return function(name) {
+			if(typeof _this[name] == "function" && typeof _super[name] == "function" && fnTest.test(_this[name])){
+				this[name] = (function(name, fn){
+					return function() {
+						var tmp = this._super;
+						// Add a new ._super() method that is the same method
+						// but on the super-class
+						this._super = _super[name];
+						// The method only need to be bound temporarily, so we
+						// remove it when we're done executing
+						var ret = fn.apply(this, arguments);		
+						this._super = tmp;
+						return ret;
+					};
+				})(name, _this[name])
+			}else if(!(name in _this) || typeof _this[name] == "function"){
+				this[name] = _super[name];
+			}
+		}
+	}
+	var extend = function(instantiateSuper, constructor, argumentConverter) {
+		return function() {
+			var _this, _super;
+			_super = instantiateSuper(argumentConverter(arguments));
+			var _thisConstructor = objectBuilder(constructor, _super);
+			_this = new _thisConstructor(arguments);
+			Object.keys(_this).forEach(inherit(_this,_super));
+			Object.keys(_super).forEach(override(_this,_super));
+		}
+	}
+	var classFactory = function(pkg) {
+		return function(className,constructor,statics,superClass,argumentConverter) {
+			if (typeof className != 'string') {
+				throw new Error("Class name must be a string!");
+			}
+			if (typeof constructor != 'function') {
+				throw new Error("Constructor must be a function!");
+			}
+			if (typeof statics == 'function') {
+				argumentConverter = superClass;
+				superClass = statics;
+				statics = (function(){})();
+			}
+			if (!superClass) {
+				pkg[className] = constructor;
+				pkg[className].name = className;
+			} else {
+				argumentConverter = argumentConverter || defaultArgumentConverter;
+				var instantiateSuper = instantiate(superClass);
+				pkg[className] = extend(instantiateSuper, constructor, argumentConverter);
+				pkg[className].name = className;
+				pkg[className].prototype = instantiateSuper();//instanceof recognizes superclass
+			}
+			appendStatics(pkg[className], statics);
+		}
+	}
 	return function (root,namespace){
-		var ref = root||window;
+		var pkg = root||global||window;
 		namespace = namespace || "";
 		var names = namespace.split("/.");
 		names.forEach(function(name){
 			if(name.length>0){
-				ref[name] = ref[name] || {};
-				ref = ref[name];
+				pkg[name] = pkg[name] || {};
+				pkg = pkg[name];
 			}
 		});
-		var baseFunction = function(params){
-			var className = params.className;
-			var superClass = params.superClass;
-			var constructor = params.constructor;
-			var argumentConverter = params.argumentConverter;
-			var statics = params.statics;
-			if(!superClass){
-				ref[className] = constructor;
-				ref[className].name = className;
-			}else{
-				argumentConverter = argumentConverter || function(args){return args;};
-				var _superConstructor = objectBuilder(superClass);
-				ref[className] = function(){
-					var _this, _super;
-					_super = new _superConstructor(argumentConverter(arguments));
-					var _thisConstructor = objectBuilder(constructor);
-					_thisConstructor.prototype = _super;
-					_this = new _thisConstructor(arguments);
-					for(var name in _this){
-						if(typeof _this[name] == "function" && typeof _super[name] == "function" && !fnTest.test(_this[name])){
-							_super[name] = _this[name];
-						}else if(!(name in _super) || typeof _super[name] != "function"){
-							this[name] = _this[name];
-						}
-					}
-					for(var name in _super){
-						if(typeof _this[name] == "function" && typeof _super[name] == "function" && fnTest.test(_this[name])){
-							this[name] = (function(name, fn){
-								return function() {
-									var tmp = this._super;
-									// Add a new ._super() method that is the same method
-									// but on the super-class
-									this._super = _super[name];
-									// The method only need to be bound temporarily, so we
-									// remove it when we're done executing
-									var ret = fn.apply(this, arguments);		
-									this._super = tmp;
-									return ret;
-								};
-							})(name, _this[name])
-						}else if(!(name in _this) || typeof _this[name] == "function"){
-							this[name] = _super[name];
-						}
-					}
-				};
-				ref[className].name = className;
-				ref[className].prototype = new _superConstructor();//instanceof recognizes superclass
-			}
-			if(statics){
-				for(var x in statics){
-					if(x in ref[className]){
-						throw "Cannot add static member " + x + " to class " + className + ".";
-					}else{
-						ref[className][x] = statics[x];
-					}
-				}
-			}
-		}
-		return baseFunction;
+		return classFactory(pkg);
 	};
 }()
