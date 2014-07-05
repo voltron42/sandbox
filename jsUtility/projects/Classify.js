@@ -1,4 +1,4 @@
-Classify = function(){
+module.exports = (function(){
 	var fnTest = /xyz/.test(function(){xyz;}) ? /\b_super\b/ : /.*/;
 	var objectBuilder = function(baseClass, superClassInstance){
 		var out = function(args){
@@ -22,7 +22,7 @@ Classify = function(){
 				return key;
 			});
 			if (existingMembers.length > 0) {
-				throw "Cannot add static members " + existingMembers + " to class " + className + ".";
+				throw new Error("Cannot add static members " + existingMembers + " to class " + className + ".");
 			}
 			Object.keys(statics).forEach(function(key) {
 				cls[key] = statics[key];
@@ -32,44 +32,44 @@ Classify = function(){
 	var defaultArgumentConverter = function() {
 		return arguments;
 	}
-	var inherit = function(_this,_super) {
+	var inherit = function(me,_this,_super) {
 		return function(name) {
 			if(typeof _this[name] == "function" && typeof _super[name] == "function" && !fnTest.test(_this[name])){
 				_super[name] = _this[name];
 			}else if(!(name in _super) || typeof _super[name] != "function"){
-				this[name] = _this[name];
+				me[name] = _this[name];
 			}
 		}
 	}
-	var inherit = function(_this,_super) {
+	var override = function(me,_this,_super) {
 		return function(name) {
 			if(typeof _this[name] == "function" && typeof _super[name] == "function" && fnTest.test(_this[name])){
-				this[name] = (function(name, fn){
+				me[name] = (function(name, fn){
 					return function() {
-						var tmp = this._super;
+						var tmp = me._super;
 						// Add a new ._super() method that is the same method
 						// but on the super-class
-						this._super = _super[name];
+						me._super = _super[name];
 						// The method only need to be bound temporarily, so we
 						// remove it when we're done executing
-						var ret = fn.apply(this, arguments);		
-						this._super = tmp;
+						var ret = fn.apply(me, arguments);	
+						me._super = tmp;
 						return ret;
 					};
 				})(name, _this[name])
 			}else if(!(name in _this) || typeof _this[name] == "function"){
-				this[name] = _super[name];
+				me[name] = _super[name];
 			}
 		}
 	}
 	var extend = function(instantiateSuper, constructor, argumentConverter) {
 		return function() {
-			var _this, _super;
-			_super = instantiateSuper(argumentConverter(arguments));
+			var _this, _super, me = this;
+			_super = instantiateSuper(argumentConverter.apply(null,arguments));
 			var _thisConstructor = objectBuilder(constructor, _super);
 			_this = new _thisConstructor(arguments);
-			Object.keys(_this).forEach(inherit(_this,_super));
-			Object.keys(_super).forEach(override(_this,_super));
+			Object.keys(_this).forEach(inherit(me,_this,_super));
+			Object.keys(_super).forEach(override(me,_this,_super));
 		}
 	}
 	var classFactory = function(pkg) {
@@ -110,4 +110,4 @@ Classify = function(){
 		});
 		return classFactory(pkg);
 	};
-}()
+})()
