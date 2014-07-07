@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE uml SYSTEM "domain.dtd">
+<uml>
+  <domain>
+    <class name="Game">
+      <field include-getter="true" include-setter="false">
+        <variable name="title">
+          <primitive type="string"/>
+        </variable>
+        <access is-final="false" is-static="false" visibility="private"/>
+      </field>
+    </class>
+    <class name="Board">
+    </class>
+    <class name="Space">
+    </class>
+    <class name="Deck">
+    </class>
+    <class name="Card">
+    </class>
+    <relationship name="gameBoards">
+      <from>
+        <node className="Game" cardinality="required"/>
+      </from>
+      <to>
+        <node className="Board" cardinality="zeroOrMore"/>
+      </to>
+    </relationship>
+    <relationship name="spaces">
+      <from>
+        <node className="Board" cardinality="required"/>
+      </from>
+      <to>
+        <node className="Space" cardinality="oneOrMore"/>
+      </to>
+    </relationship>
+    <relationship name="gameDecks">
+      <from>
+        <node className="Game" cardinality="required"/>
+      </from>
+      <to>
+        <node className="Deck" cardinality="zeroOrMore"/>
+      </to>
+    </relationship>
+    <relationship name="cards">
+      <from>
+        <node className="Deck" cardinality="required"/>
+      </from>
+      <to>
+        <node className="Card" cardinality="oneOrMore"/>
+      </to>
+    </relationship>
+  </domain>
+</uml>

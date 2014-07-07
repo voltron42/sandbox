@@ -1,1 +1,68 @@
 <!ELEMENT uml (domain|sequence)>
+<!ELEMENT domain ((interface|class),(interface|class|enum|relationship)*)>
+<!ELEMENT interface (extends*,constant*,method-declaration*)>
+<!ATTLIST interface
+  name CDATA #REQUIRED
+>
+<!ELEMENT extends EMPTY>
+<!ATTLIST extends interface CDATA #REQUIRED>
+<!ELEMENT constant (variable)>
+<!ELEMENT variable (primitive|datatype)>
+<!ATTLIST variable name CDATA #REQUIRED>
+<!ELEMENT primitive EMPTY>
+<!ATTLIST primitive type (boolean|integer|decimal|string|date|regexp) #REQUIRED>
+<!ELEMENT datatype EMPTY>
+<!ATTLIST datatype 
+  name CDATA #REQUIRED
+>
+<!ELEMENT method-declaration (parameter*,return-type)>
+<!ATTLIST method-declaration
+  name CDATA #REQUIRED
+>
+<!ELEMENT parameter (variable)>
+<!ELEMENT return-type (primitive|datatype)>
+<!ELEMENT class (implements*,field*,method*,constructor*)>
+<!ATTLIST class 
+  name CDATA #REQUIRED
+  extends CDATA #IMPLIED
+  is-abstract (true|false) #IMPLIED
+>
+<!ELEMENT implements EMPTY>
+<!ATTLIST implements interface CDATA #REQUIRED>
+<!ELEMENT field (variable,access)>
+<!ATTLIST field 
+  include-getter (true|false) #IMPLIED
+  include-setter (true|false) #IMPLIED
+>
+<!ELEMENT access EMPTY>
+<!ATTLIST access 
+  visibility (public|protected|private) #IMPLIED
+  is-static (true|false) #IMPLIED
+  is-final (true|false) #IMPLIED
+>
+<!ELEMENT method (method-declaration,(access|abstract-access))>
+<!ELEMENT abstract-access EMPTY>
+<!ATTLIST abstract-access 
+  visibility (public|protected) #IMPLIED
+>
+<!ELEMENT constructor (parameter*)>
+<!ELEMENT enum (enum-value*)>
+<!ATTLIST enum 
+  name CDATA #REQUIRED
+>
+<!ELEMENT enum-value EMPTY>
+<!ATTLIST enum-value
+  value CDATA #REQUIRED
+>
+<!ELEMENT relationship (from,to)>
+<!ATTLIST relationship
+  name CDATA #REQUIRED
+>
+<!ELEMENT from (node)>
+<!ELEMENT to (node)>
+<!ELEMENT node EMPTY>
+<!ATTLIST node
+  className CDATA #REQUIRED
+  cardinality (optional|required|zeroOrMore|oneOrMore) #IMPLIED
+>
+<!ELEMENT sequence EMPTY>
