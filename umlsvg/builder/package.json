@@ -2,6 +2,7 @@
 	"name" : "umlsvg",
 	"version" : 0,
 	"devDependencies": {
-		"xmldoc" : ""
+		"xmldoc" : "",
+		"pdfkit" : ""
 	}
 }
