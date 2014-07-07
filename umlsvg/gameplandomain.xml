@@ -2,6 +2,15 @@
 <!DOCTYPE uml SYSTEM "domain.dtd">
 <uml>
   <domain>
+    <interface name="GameConstruct">
+    </interface>
+    <interface name="Customizable">
+      <method-declaration name="getGameConstruct">
+        <return-type>
+          <datatype name="GameConstruct"/>
+        </return-type>
+      </method-declaration>
+    </interface>
     <class name="Game">
       <field include-getter="true" include-setter="false">
         <variable name="title">
@@ -13,10 +22,34 @@
     <class name="Board">
     </class>
     <class name="Space">
+      <implements interface="Customizable"/>
     </class>
     <class name="Deck">
     </class>
     <class name="Card">
+      <implements interface="Customizable"/>
+    </class>
+    <enum name="RandomizerType">
+      <enum-value value="spinner"/>
+      <enum-value value="die"/>
+    </enum>
+    <class name="Randomizer">
+      <field include-getter="true" include-setter="false">
+        <variable name="type">
+          <datatype name="RandomizerType"/>
+        </variable>
+        <access visibility="private" is-final="false" is-static="false"/>
+      </field>
+    </class>
+    <class name="RandomizerOption">
+      <implements interface="Customizable"/>
+    </class>
+    <class name="Player">
+    </class>
+    <class name="Token">
+      <implements interface="Customizable"/>
+    </class>
+    <class name="Pawn" extends="Token">
     </class>
     <relationship name="gameBoards">
       <from>
@@ -48,6 +81,30 @@
       </from>
       <to>
         <node className="Card" cardinality="oneOrMore"/>
+      </to>
+    </relationship>
+    <relationship name="players">
+      <from>
+        <node className="Game" cardinality="required"/>
+      </from>
+      <to>
+        <node className="Player" cardinality="oneOrMore"/>
+      </to>
+    </relationship>
+    <relationship name="tokens">
+      <from>
+        <node className="Player" cardinality="required"/>
+      </from>
+      <to>
+        <node className="Token" cardinality="zeroOrMore"/>
+      </to>
+    </relationship>
+    <relationship name="pieces">
+      <from>
+        <node className="Player" cardinality="required"/>
+      </from>
+      <to>
+        <node className="Pawn" cardinality="oneOrMore"/>
       </to>
     </relationship>
   </domain>
