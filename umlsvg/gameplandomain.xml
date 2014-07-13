@@ -4,10 +4,12 @@
   <domain>
     <interface name="GameConstruct">
     </interface>
+    <class name="GameComponent">
+    </class>
     <interface name="Customizable">
-      <method-declaration name="getGameConstruct">
+      <method-declaration name="getGameComponent">
         <return-type>
-          <datatype name="GameConstruct"/>
+          <datatype name="GameComponent"/>
         </return-type>
       </method-declaration>
     </interface>
@@ -23,6 +25,15 @@
     </class>
     <class name="Space">
       <implements interface="Customizable"/>
+      <method>
+        <method-declaration name="landPawn">
+          <parameter>
+            <variable name="pawn">
+              <datatype name="Pawn"/>
+            </variable>
+          </parameter>
+        </method-declaration>
+      </method>
     </class>
     <class name="Deck">
     </class>
