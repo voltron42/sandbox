@@ -15,7 +15,7 @@
 <!ATTLIST datatype 
   name CDATA #REQUIRED
 >
-<!ELEMENT method-declaration (parameter*,return-type?)>
+<!ELEMENT method-declaration (return-type?,parameter*)>
 <!ATTLIST method-declaration
   name CDATA #REQUIRED
 >
