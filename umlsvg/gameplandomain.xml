@@ -13,6 +13,14 @@
         </return-type>
       </method-declaration>
     </interface>
+    <enum name="SimpleAction">
+      <enum-value value="rollDie"/>
+      <enum-value value="spinSpinner"/>
+      <enum-value value="drawCard"/>
+      <enum-value value="placeCard"/>
+      <enum-value value="playCard"/>
+      <enum-value value="movePiece"/>
+    </enum>
     <class name="Game">
       <field include-getter="true" include-setter="false">
         <variable name="title">
