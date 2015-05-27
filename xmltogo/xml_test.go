@@ -5,7 +5,6 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io/ioutil"
-	"reflect"
 	"testing"
 )
 
@@ -25,10 +24,10 @@ func Test(t *testing.T) {
 }
 
 var marshallerOfA = xmltogo.InterfaceMarshaller{
-	ChildMap: map[string]reflect.Type{
-		"b": reflect.TypeOf(B{}),
-		"c": reflect.TypeOf(C{}),
-		"d": reflect.TypeOf(D{}),
+	ChildMap: map[string]func() interface{}{
+		"b": func() interface{} { return B{} },
+		"c": func() interface{} { return C{} },
+		"d": func() interface{} { return D{} },
 	},
 }
 

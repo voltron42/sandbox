@@ -8,7 +8,7 @@ import (
 )
 
 type InterfaceMarshaller struct {
-	ChildMap map[string]reflect.Type
+	ChildMap map[string]func() interface{}
 }
 
 func (i *InterfaceMarshaller) MarshalChildren(d *xml.Decoder, start xml.StartElement, appender func(item interface{}) error) error {
@@ -27,7 +27,7 @@ func (i *InterfaceMarshaller) MarshalChildren(d *xml.Decoder, start xml.StartEle
 				if !ok {
 					return errors.New(fmt.Sprintf("Token name not recognized: %v", bookend.Name.Local))
 				}
-				item := reflect.New(itemType).Interface()
+				item := itemType()
 				err := d.DecodeElement(&item, &bookend)
 				if err != nil {
 					return err
