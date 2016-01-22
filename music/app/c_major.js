@@ -18,7 +18,16 @@
               'quarter|G5',
               'quarter|A5',
               'quarter|B5',
-              'quarter|C6'
+              'quarter|C6',
+              'quarter|',
+              'quarter|C6',
+              'quarter|B5',
+              'quarter|A5',
+              'quarter|G5',
+              'quarter|F5',
+              'quarter|E5',
+              'quarter|D5',
+              'quarter|C5'
           ]
       }
   }
