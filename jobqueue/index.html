@@ -1,0 +1,107 @@
+<html>
+  <head>
+    <style>
+      table, td, th {
+        border: 1px solid black;
+        margin: 0px;
+        padding: 5px;
+      }
+      table {
+        padding: 0px;
+      }
+    </style>
+    <script type="text/javascript" src="exec.js"></script>
+  </head>
+  <body>
+    <div>
+      <table>
+        <tr>
+          <th>Interval</th>
+          <td>
+            <input type="text" id="intervalvalue"/>
+          </td>
+          <td>
+            <select id="intervalunit">
+              <option value="">(Unit)</option>
+              <option value="MILLIS">MILLIS</option>
+              <option value="SECOND">SECOND</option>
+              <option value="MINUTE">MINUTE</option>
+              <option value="HOUR">HOUR</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>Offset</th>
+          <td>
+            <input type="text" id="offsetvalue"/>
+          </td>
+          <td>
+            <select id="offsetunit">
+              <option value="">(Unit)</option>
+              <option value="MILLIS">MILLIS</option>
+              <option value="SECOND">SECOND</option>
+              <option value="MINUTE">MINUTE</option>
+              <option value="HOUR">HOUR</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>Duration</th>
+          <td>
+            <input type="text" id="durationvalue"/>
+          </td>
+          <td>
+            <select id="durationunit">
+              <option value="">(Unit)</option>
+              <option value="MILLIS">MILLIS</option>
+              <option value="SECOND">SECOND</option>
+              <option value="MINUTE">MINUTE</option>
+              <option value="HOUR">HOUR</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>Replication</th>
+          <td colspan="2"><button id="repl" onclick="Exec.repl.toggle()" disabled>Stop</button></td>
+        </tr>
+        <tr>
+          <th>Current Time</th>
+          <td colspan="2" id="current"></td>
+        </tr>
+        <tr>
+          <th>Replication Time</th>
+          <td colspan="2" id="repltime"></td>
+        </tr>
+        <tr>
+          <td colspan="3"><button id="start" onclick="Exec.start()">Start Executor</button></td>
+        </tr>
+      </table>
+    </div>
+    <hr/>
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th>Job Id</th>
+            <th>Lower Bound</th>
+            <th>Upper Bound</th>
+          </tr>
+        </thead>
+        <tbody id="queue"></tbody>
+      </table>
+    </div>
+    <hr/>
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th>Job Start</th>
+            <th>Lower Bound</th>
+            <th>Upper Bound</th>
+          </tr>
+        </thead>
+        <tbody id="table"></tbody>
+      </table>
+    </div>
+  </body>
+</html>
