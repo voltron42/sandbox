@@ -25,9 +25,24 @@ var Exec = (function(){
     outputs.current.innerHTML = time.toString()
     setTimeout(function() {currenttime()}, 500)
   }
-  var repl = true;
+  var repl = false;
+  var repltime;
+  var repltimeout;
+  var replfn = function() {
+    repltime = new Date()
+    outputs.repltime.innerHTML = repltime.toString()
+    repltimeout = setTimeout(function() {replfn()}, 500)
+  }
   var repltoggle = function() {
-    if (repl) {}
+    if (repl) {
+      repl = false;
+      outputs.repl.value = "START"
+      clearTimeout(repltimeout)
+    } else {
+      repl = true;
+      outputs.repl.value = "STOP"
+      replfn()
+    }
   }
   return {
     start:function() {
@@ -45,12 +60,10 @@ var Exec = (function(){
       ctrls.start.disabled = true;
       outputs.repl.disabled = false;
       currenttime()
-
+      repltoggle()
     },
     repl:{
-      toggle:function() {
-
-      }
+      toggle:repltoggle
     }
   }
 })()
