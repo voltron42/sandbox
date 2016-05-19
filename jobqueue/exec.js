@@ -1,4 +1,7 @@
 var Exec = (function(){
+var units = {
+
+}
   var inputnames = [
     "intervalvalue",
     "intervalunit",
