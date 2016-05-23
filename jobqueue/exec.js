@@ -1,7 +1,11 @@
 var Exec = (function(){
-var units = {
-
-}
+  var getTimes = function(timeinputs) {
+    return {
+      interval:time.toMillis(timeinputs.intervalvalue,timeinputs.intervalunit),
+      offset:time.toMillis(timeinputs.offsetvalue,timeinputs.offsetunit),
+      duration:time.toMillis(timeinputs.durationvalue,timeinputs.durationunit),
+    }
+  }
   var inputnames = [
     "intervalvalue",
     "intervalunit",
@@ -17,24 +21,26 @@ var units = {
     "repl",
     "current",
     "repltime",
+    "queue"
     "table"
   ]
   var inputs = {}
   var outputs = {}
   var ctrls = {}
   var state = {}
-  var currenttime = function() {
-    var time = new Date()
+  var step = 250
+  var currtime
+  var initcurrtime = function() {
+    currtime = new Date()
     outputs.current.innerHTML = time.toString()
-    setTimeout(function() {currenttime()}, 500)
+    setTimeout(function() {currenttime()}, step)
   }
   var repl = false;
   var repltime;
   var repltimeout;
   var replfn = function() {
-    repltime = new Date()
-    outputs.repltime.innerHTML = repltime.toString()
-    repltimeout = setTimeout(function() {replfn()}, 500)
+    repltime += step
+    repltimeout = setTimeout(function() {replfn()}, step)
   }
   var repltoggle = function() {
     if (repl) {
@@ -44,8 +50,22 @@ var units = {
     } else {
       repl = true;
       outputs.repl.value = "STOP"
-      replfn()
+      repltimeout = setTimeout(function() {replfn()}, step)
     }
+  }
+  var replreset = function() {
+    repltime = new Date()
+    outputs.repltime.innerHTML = repltime.toString()
+  }
+  var jobFields = ["jobId","lower","upper"]
+  var resultFields = ["start","end","lower","upper"]
+  var results = []
+  var updateOutput = function(elem, list, fieldset) {
+    elem.innerHTML = list.map(function(job){
+      return "<tr>" + fieldset.map(function(field) {
+        return "<td>" + job[field] + "</td>"
+      }).join("") + "</tr>"
+    }).join("")
   }
   return {
     start:function() {
@@ -62,11 +82,32 @@ var units = {
       })
       ctrls.start.disabled = true;
       outputs.repl.disabled = false;
-      currenttime()
+      var times = getTimes(inputs);
+      var ops = {
+        getCurrTime:function() {
+          return currtime
+        },
+        getReplTime:function() {
+          return repltime
+        },
+        update:function(queue) {
+          updateOutput(output.queue, queue, jobFields)
+        },
+        finish:function(job) {
+          job.end = new Date();
+          results.push(job)
+          updateOutput(output.table, results, resultFields)
+        }
+      }
+      var jqs = new JobQueueScheduler(times, ops)
+      initcurrtime()
+      replreset()
       repltoggle()
+      jqs.invoke()
     },
     repl:{
-      toggle:repltoggle
+      toggle:repltoggle,
+      reset:replreset
     }
   }
 })()

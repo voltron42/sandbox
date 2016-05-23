@@ -10,6 +10,10 @@
         padding: 0px;
       }
     </style>
+    <script type="text/javascript" src="time.js"></script>
+    <script type="text/javascript" src="queue.js"></script>
+    <script type="text/javascript" src="scheduler.js"></script>
+    <script type="text/javascript" src="JobQueueScheduler.js"></script>
     <script type="text/javascript" src="exec.js"></script>
   </head>
   <body>
@@ -22,7 +26,6 @@
           </td>
           <td>
             <select id="intervalunit">
-              <option value="">(Unit)</option>
               <option value="MILLIS">MILLIS</option>
               <option value="SECOND">SECOND</option>
               <option value="MINUTE">MINUTE</option>
@@ -37,7 +40,6 @@
           </td>
           <td>
             <select id="offsetunit">
-              <option value="">(Unit)</option>
               <option value="MILLIS">MILLIS</option>
               <option value="SECOND">SECOND</option>
               <option value="MINUTE">MINUTE</option>
@@ -52,7 +54,6 @@
           </td>
           <td>
             <select id="durationunit">
-              <option value="">(Unit)</option>
               <option value="MILLIS">MILLIS</option>
               <option value="SECOND">SECOND</option>
               <option value="MINUTE">MINUTE</option>
@@ -62,7 +63,8 @@
         </tr>
         <tr>
           <th>Replication</th>
-          <td colspan="2"><button id="repl" onclick="Exec.repl.toggle()" disabled>Stop</button></td>
+          <td><button id="repl" onclick="Exec.repl.toggle()" disabled>Stop</button></td>
+          <td><button onclick="Exec.repl.reset()" disabled>Reset</button></td>
         </tr>
         <tr>
           <th>Current Time</th>
@@ -96,6 +98,7 @@
         <thead>
           <tr>
             <th>Job Start</th>
+            <th>Job End</th>
             <th>Lower Bound</th>
             <th>Upper Bound</th>
           </tr>
