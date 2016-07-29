@@ -25,7 +25,7 @@ class XMLParser3 {
     return $assoc[0];
   }
 
-  static function xml2assoc($xml, $name) {
+  private static function xml2assoc($xml, $name) {
       print "<ul>\n";
 
       $tree = null;
@@ -39,13 +39,13 @@ class XMLParser3 {
               $node = array();
 
               print("Adding " . $xml->name ."<br>\n");
-              $node['tag'] = $xml->name;
+              $node['tag'] = self::camelCase($xml->name);
 
               if($xml->hasAttributes) {
                   $attributes = array();
                   while($xml->moveToNextAttribute()) {
                       print("Adding attr " . $xml->name ." = " . $xml->value . "<br>\n");
-                      $attributes[$xml->name] = $xml->value;
+                      $attributes[self::camelCase($xml->name)] = $xml->value;
                   }
                   $node['attr'] = $attributes;
               }
@@ -69,6 +69,13 @@ class XMLParser3 {
 
       return $tree;
   }
+
+    private static function camelCase(String $name) {
+      $name = ucwords($name,"-");
+      $name = lcfirst($name);
+      $labels = explode('-',$name);
+      return implode('',$labels);
+    }
 }
 
 

@@ -13,6 +13,8 @@ $xml = '<document title="hi" from="there" to="steve">'
 .'<head id="3">Monkeys</head>'
 .'not okay'
 .'<body id="2">thomas</body>'
+.'<new-node/>'
+.'<node new-id="hi again"/>'
 .'</document>';
 
 echo "<PRE>";
