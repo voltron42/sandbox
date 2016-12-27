@@ -16,3 +16,28 @@ dependencies {
 
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
+
+test {
+    useJUnit {
+        includeCategories 'com.voltron42.testCategories.UnitTest'
+    }
+}
+
+task testIntegration(type: Test) {
+    useJUnit {
+        includeCategories 'com.voltron42.testCategories.IntegrationTest'
+    }
+}
+
+task testRegression(type: Test) {
+    useJUnit {
+        includeCategories 'com.voltron42.testCategories.RegressionTest'
+    }
+}
+
+task testPerformance(type: Test) {
+    useJUnit {
+        includeCategories 'com.voltron42.testCategories.PerformanceTest'
+    }
+}
+
