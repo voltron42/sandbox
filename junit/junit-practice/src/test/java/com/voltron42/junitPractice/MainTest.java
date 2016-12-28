@@ -6,6 +6,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
+import static org.junit.Assert.assertTrue;
+
 /**
  * Created by daniel.johnson on 12/27/2016.
  */
@@ -24,6 +26,6 @@ public class MainTest {
 
     @Test
     public void testMain() throws Exception {
-
+        assertTrue("here's an issue", false);
     }
 }
