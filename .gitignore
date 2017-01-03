@@ -1,2 +1,3 @@
 svg2png/**/*.png
 junit/junit-practice/build/
+*.class
