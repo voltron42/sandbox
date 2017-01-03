@@ -1,12 +1,13 @@
 package com.voltron42.junitPractice;
 
 import com.voltron42.testCategories.IntegrationTest;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import static org.junit.Assert.assertTrue;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by daniel.johnson on 12/27/2016.
@@ -14,18 +15,12 @@ import static org.junit.Assert.assertTrue;
 @Category(IntegrationTest.class)
 public class MainTest {
 
-    @Before
-    public void setUp() throws Exception {
-
-    }
-
-    @After
-    public void tearDown() throws Exception {
-
-    }
-
     @Test
     public void testMain() throws Exception {
-        assertTrue("here's an issue", false);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(out));
+        Main.main(new String[0]);
+        String printOut = new String(out.toByteArray());
+        assertEquals(printOut, "Hello World!\r\n");
     }
 }
