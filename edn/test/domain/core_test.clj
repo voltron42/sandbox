@@ -2,22 +2,6 @@
   (:require [clojure.test :refer :all]
             [domain.core :refer :all]))
 
-(def small-domain '{
-                    Artist {
-                            name [text {:max-size 32}]
-                            albums */Album
-                            }
-                    Album {
-                           title [text {:max-size 128}]
-                           year ?/int
-                           tracks */Track
-                           }
-                    Track {
-                           title [text {:max-size 128}]
-                           duration duration
-                           }
-                    })
-
 (def big-domain '{ Student [{
                              id int
                              first-name [text {:max-size 32}]
@@ -85,11 +69,57 @@
                             }
                    })
 
+(def small-domain '{
+                    Artist {
+                            name [text {:max-size 32}]
+                            albums */Album
+                            }
+                    Album {
+                           title [text {:max-size 128}]
+                           year ?/int
+                           tracks */Track
+                           }
+                    Track {
+                           title [text {:max-size 128}]
+                           duration duration
+                           }
+                    })
+
+(deftest test-objectify
+  (is (= (objectify small-domain)
+         [{:class-name :Artist
+           :fields [{:field-name :name
+                     :type :text
+                     :cardinality :required
+                     :max-size 32}
+                    {:field-name :albums
+                     :type :Album
+                     :cardinality :one-to-many}]}
+          {:class-name :Album
+           :fields [{:field-name :title
+                     :type :text
+                     :cardinality :required
+                     :max-size 128}
+                    {:field-name :year
+                     :type :int
+                     :ordinality :optional}
+                    {:field-name :tracks
+                     :type :Track
+                     :cardinality :one-to-many}]}
+          {:class-name :Track
+           :fields [{:field-name :title
+                     :type :text
+                     :cardinality :required
+                     :max-size 128}
+                    {:field-name :duration
+                     :type :duration
+                     :cardinality :required}]}])))
+
 (deftest test-sqlize-small
   (is (= (sqlize small-domain)
          "CREATE TABLE Artist (
            artist_id LONG GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-           name VARCHAR(32) NOT NULL,
+           name VARCHAR(32) NOT NULL
          );
          CREATE TABLE Album (
            album_id LONG GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -108,7 +138,7 @@
 
 (deftest test-schemafy-small
   (is (= (schemafy small-domain "Discography")
-         "<?xml version=\"1.0\"?>
+         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
          <xs:schema
          xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"
          targetNamespace=\"https://www.w3schools.com\"

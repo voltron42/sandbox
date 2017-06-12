@@ -42,8 +42,7 @@
     (with-redefs [jdbc/query #(reset! actual %&)]
       ((build-query db '{Select w/*
                       From [l/form.formulary_load
-                            {Inner-Join w/form.formulary_webdav
-                             On (= l/formulary_load_id w/formulary_load_id)}]
+                            Inner-Join w/form.formulary_webdav (= l/formulary_load_id w/formulary_load_id)]
                       Where (and (= l/management_status "A")
                                  (<= l/effective_date :effective-date)
                                  (= w/version :version)

@@ -2,7 +2,11 @@
   (:require [clojure.string :as s]
             [clojure.java.jdbc :as jdbc]))
 
-(def ^:private clause-list '[Select From Where Order-By Limit])
+(def ^:private clause-list '[Select From Where Order-By])
+
+(def ^:private joins {'Inner-Join "INNER JOIN"
+                      'Left-Outer-Join "LEFT OUTER JOIN"
+                      'Right-Outer-Join "RIGHT OUTER JOIN"})
 
 (defn unary [term] #(str term "(" % ")"))
 
@@ -19,7 +23,11 @@
 
 (defn- resolve-field [field-symbol] (let [nm (name field-symbol)
                                           ns (namespace field-symbol)]
-                                      (str nm (if (nil? ns) "" (str " " ns)))))
+                                      (str (if (nil? ns) "" (str ns ".")) nm)))
+
+(defn- resolve-table [table] (let [nm (name table)
+                                   ns (namespace table)]
+                               (str nm (if (nil? ns) "" (str " " ns)))))
 
 (defn- resolve-expression [expr all-params]
   (cond
@@ -29,11 +37,11 @@
                                                    (fn [{:keys [args param-list]} param]
                                                      (let [{:keys [query params]} (resolve-expression param param-list)]
                                                        {:args (concat args (vector query))
-                                                        :param-list params}))
+                                                              :param-list params}))
                                                    {:args [] :param-list all-params}
                                                    (rest expr))]
                    {:query (apply op-func args)
-                    :params param-list})
+                           :params param-list})
     (symbol? expr) {:query (resolve-field expr) :params all-params}
     (keyword? expr) {:query "?" :params (concat all-params (vector expr))}
     :else {:query (str expr) :params all-params}))
@@ -41,46 +49,78 @@
 (defn- resolve-column [params column]
   (cond
     (symbol? column)   {:query (resolve-field column)
-                        :params params}
-    (map? column) (let [[[k v]] column
-                        {:keys [query params]} (resolve-column params V)]
+                               :params params}
+    (map? column) (let [[[k v]] (into [] column)
+                        {:keys [query params]} (resolve-column params v)]
                     {:query (str query " as " k)
-                     :params params})
+                            :params params})
     (list? column) (resolve-expression column params)))
 
 (defn- resolve-sorter [column params]
-  (cond
-    (symbol? column) {})
-  )
+  {:query (cond
+            (symbol? column) (resolve-field column)
+            (map? column) (let [[[k v]] (into [] column)] (str (resolve-field k) (s/upper-case (name v)))))
+          :params params})
 
-(defn- resolve-table [table])
-
-(defn- resolve-join [join])
+(defn- resolve-join [[type table on] params]
+  (let [{:keys [query params]} (resolve-expression on params)]
+    {:query (str (joins type) " " (resolve-table table) " " query) :params params}))
 
 (defn- resolve-where [clause params] (resolve-expression clause params))
 
-(def ^:private clause-funcs {'Select #(str "SELECT " (s/join ", " (map (partial resolve-column %2) (if (vector? %1) %1 (vector %1)))))
-                             'From #(let [tables (if (vector? %1) %1 (vector %1))
-                                          {:keys [query params]} (reduce (fn [{:keys [query params]} table]
-                                                                           {:query (resolve-join table)
-                                                                            :params })
-                                                                         {:query "" :params %2}
-                                                                         (rest tables))]
-                                      {:query (str "FROM " (resolve-table (first tables)) " " query)
-                                       :params params}
-                                      )
-                             'Where #(let [{:keys [query params]} (resolve-where %1 %2)] {:query (str "WHERE " query) :params params})
-                             'Order-By #(str "ORDER BY " (s/join ", " (map (partial resolve-sorter %2) (if (vector? %1) %1 (vector %1)))))})
+(defn- resolve-list [step-fn list-fn wrap-fn delim]
+  (fn [q p]
+    (let [{:keys [query params]} (reduce
+                                   (fn [{:keys [query params]} elem]
+                                     (let [prev-q query
+                                           {:keys [query params]} (step-fn params elem)]
+                                       {:query (concat prev-q (vector query))
+                                        :params}))
+                                   {:query [] :params p}
+                                   (list-fn q p))]
+      {:query (wrap-fn (s/join delim query)) :params params})))
 
-(defn- resolve-query [query paramlist] (reduce (fn [{:keys [query params]} clause]
-                                                 (let [[prev-query prev-params] [query params]
-                                                       {:keys [query params]} ((clause-funcs %) (query %) params)]
-                                                   {:query (str prev-query query " ")
-                                                    :params (concat prev-params params)}))
-                                               {:query "" :params paramlist}
-                                               (filter #(contains? (set (keys query)) %) clause-list)))
+(def ^:private clause-funcs {'Select (resolve-list
+                                         #(resolve-column %1 %2)
+                                         (fn [qu _] (if (vector? qu) qu (vector qu)))
+                                         #(str "SELECT " %)
+                                         ", ")
+                             'From (fn [q p]
+                                     (let [tables (if (vector? q) q (vector q))]
+                                       ((resolve-list
+                                          #(resolve-join %2 %1)
+                                          (constantly (partition 3 (rest tables)))
+                                          #(str "FROM " (resolve-table (first tables)) " " %)
+                                          " ")
+                                         q p)))
+                             'Order-By (resolve-list
+                                           #(resolve-sorter %2 %1)
+                                           (fn [qu _] (if (vector? qu) qu (vector qu)))
+                                           #(str "ORDER BY " %)
+                                           ", ")
+                             'Where #(let [{:keys [query params]} (resolve-where %1 %2)] {:query (str "WHERE " query) :params params})})
+
+(fn [q p]
+  (resolve-list
+    #((clause-funcs %2) (q %2) %1)
+    (constantly (filter #(contains? (set (keys q)) %) clause-list))
+    identity
+    " "))
+
+(defn- resolve-query [query paramlist] ((resolve-list
+                                          #((clause-funcs %2) (query %2) %1)
+                                          (constantly (filter #(contains? (set (keys query)) %) clause-list))
+                                          identity
+                                          " ")
+                                         query paramlist))
+
+(defn- resolve-limit [{:keys [query params]} limit]
+  (let [[l p] (cond (keyword? limit) ["?" [limit]]
+                    (number? limit) [(str limit) []])]
+    {:query (str "SELECT * FROM (" query ") WHERE rownum <= " l) :params (concat params p)}))
 
 (defn build-query [db q]
-  (let [{:keys [query params]} (resolve-query q [])]
+  (let [result (resolve-query q [])
+        {:keys [query params]} (if (contains? q 'Limit) result (resolve-limit result (q 'Limit)))]
     (fn [argmap]
-      (apply jdbc/query (into [db (s/trim query)] (map #()))))))
+      (apply jdbc/query (into [db (s/trim query)] (map #(argmap %) params))))))
