@@ -1,6 +1,7 @@
 (ns domain.core
   (:require [clojure.xml :as xml]
-            [clojure.string :as s]))
+            [clojure.string :as s]
+            [xml-short.core :refer [x-pand]]))
 
 (defn- describe-cardinality [cardinality]
   (if (nil? cardinality)
@@ -8,9 +9,11 @@
     ({"?" :optional "*" :one-to-many "$" :ref} cardinality)))
 
 (defn- type-constraints [type]
-  (let [cardinality (ns type)
-        type (keyword (name type))]
-    {:type type
+  (let [cardinality (namespace type)
+        type-name (keyword (name type))]
+    (println (str "type: " type))
+    (println (str "cardinality: " cardinality))
+    {:type type-name
      :cardinality (describe-cardinality cardinality)}))
 
 (defn- fieldify [[field-name constraints]]
@@ -22,21 +25,14 @@
         constraints (merge constraints (type-constraints type) {:field-name (keyword (name field-name))})]
     constraints))
 
-(defn- classify [[class-name class]] {:class-name (keyword (name class-name)) :fields (map fieldify class)})
+(defn- classify [[class-name class]] {:class-name (keyword (name class-name)) :fields (mapv fieldify class)})
 
-(defn objectify [domain] (map classify domain))
+(defn objectify [domain] (mapv classify domain))
 
 (defn invert-cardinality [model]
   (let [model-map (reduce #(assoc %1 (:class-name %2) %2) {} model)
         ]
     ))
-
-(defn nest-cardinality [model]
-  (let [model-map (reduce #(assoc %1 (:class-name %2) %2) {} model)]
-    (reduce (fn [m-map {:keys [class-name fields]}]
-              )
-            model-map
-            model)))
 
 (defn create-id-field [class-name]
   {:name (keyword (str (s/lower-case class-name) "_id"))
@@ -63,27 +59,49 @@
                                  (concat
                                    [(create-id-field class-name)]
                                    (filter #(not= :one-to-many (:cardinality %)) fields)))]
-             (str "CREATE TABLE " (name class-name) "(\n" field-list "\n);")
-             )
-           )
-         model)
-    )
+             (str "CREATE TABLE " (name class-name) "(\n" field-list "\n);")))
+         model)))
+
+(defn- schemafy-elem [elem]
   )
 
-(defn schemafy [domain ^String domain-name]
-  (let [model (objectify domain)]
+(defn- schemafy-attr [attr]
+  )
+
+(defn- schemafy-class [{:keys [class-name fields]}]
+  (let [[elems attrs] (map
+                        #(filter
+                           (fn [{:keys [type]}]
+                             (% (s/lower-case type) type))
+                           fields)
+                        [not= =])]
+    (into [:xs:complexType
+           {:name class-name}
+           (into [:xs:sequence]
+                 (mapv schemafy-elem elems))]
+          (mapv schemafy-attr attrs))))
+
+(defn schemafy [domain ^String domain-name ^:symbol root-type]
+  (let [{:keys [type cardinality]} (describe-cardinality root-type)
+        model (objectify domain)
+        root-complex-type [:xs:elem (merge {:name type :type type}
+                                           (if (= cardinality :one-to-many)
+                                             {:maxOccurs "unbounded"}
+                                             {}))]
+        complex-types (map schemafy-class model)]
     (with-out-str
       (xml/emit
-        {:tag :xs:schema
-         :attrs {:xmlns:xs "http://www.w3.org/2001/XMLSchema"
-                 :targetNamespace "https://www.w3schools.com"
-                 :xmlns "https://www.w3schools.com"
-                 :elementFormDefault "qualified"}
-         :content [{:tag :xs:element
-                    :attrs {:name domain-name
-                            :type domain-name}}
-                   {:tag :xs:complexType
-                    :attrs {:name domain-name}
-                    :contents []}]}))
-    )
-  )
+        (x-pand
+          (into
+            [:xs:schema
+             {:xmlns:xs "http://www.w3.org/2001/XMLSchema"
+              :targetNamespace "https://www.w3schools.com"
+              :xmlns "https://www.w3schools.com"
+              :elementFormDefault "qualified"}
+             [:xs:element
+              {:name domain-name
+               :type domain-name}]
+             [:xs:complexType
+              {:name domain-name}
+              [:xs:sequence root-complex-type]]]
+            complex-types))))))

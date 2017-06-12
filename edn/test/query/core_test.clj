@@ -15,11 +15,14 @@
 
 (deftest test-count-and-one-var
   (let [actual (atom [])
-        expected [db "SELECT count(*) as list_count FROM form.formulary_load WHERE file_load_id = ?" 12345]]
+        expected [db "SELECT COUNT(*) as list_count FROM form.formulary_load WHERE file_load_id = ?" 12345]]
     (with-redefs [jdbc/query #(reset! actual %&)]
       ((build-query db '{Select {list_count (count *)} From form.formulary_load Where (= file_load_id :file-load-id)})
         {:file-load-id 12345})
-      (is (= @actual expected)))))
+      (is (= (nth @actual 0) (nth expected 0)))
+      (is (= (nth @actual 1) (nth expected 1)))
+      (is (= (nth @actual 2) (nth expected 2)))
+      )))
 
 (deftest test-large
   (let [actual (atom [])
@@ -29,15 +32,15 @@
                    "FROM form.formulary_load l"
                    "INNER JOIN form.formulary_webdav w"
                    "ON l.formulary_load_id = w.formulary_load_id"
-                   "WHERE l.management_status = 'A'"
+                   "WHERE (l.management_status = 'A'"
                    "AND l.effective_date <= ?"
                    "AND w.version = ?"
                    "AND w.rollup_drug_db = ?"
                    "AND l.publisher = ?"
                    "AND l.list_id = ?"
                    "AND l.type = ?"
-                   "AND l.sub_type IS NULL"
-                   "ORDER BY l.effective_date desc"])
+                   "AND l.sub_type IS NULL)"
+                   "ORDER BY l.effective_date DESC"])
                    "2016/5/16" "2.1" "FDB" "PUB" "LIST" "TYPE"]]
     (with-redefs [jdbc/query #(reset! actual %&)]
       ((build-query db '{Select w/*
@@ -58,7 +61,15 @@
          :rollup-drug-db "FDB"
          :type "TYPE"
          :version "2.1"})
-      (is (= @actual expected)))))
+      (is (= (nth @actual 0) (nth expected 0)))
+      (is (= (nth @actual 1) (nth expected 1)))
+      (is (= (nth @actual 2) (nth expected 2)))
+      (is (= (nth @actual 3) (nth expected 3)))
+      (is (= (nth @actual 4) (nth expected 4)))
+      (is (= (nth @actual 5) (nth expected 5)))
+      (is (= (nth @actual 6) (nth expected 6)))
+      (is (= (nth @actual 7) (nth expected 7)))
+      )))
 
 (deftest test-limit
   (let [actual (atom [])
@@ -66,10 +77,10 @@
                           ["SELECT *"
                            "FROM (SELECT *"
                            "FROM form.rfs_load"
-                           "WHERE modified_date > ?"
+                           "WHERE (modified_date > ?"
                            "OR (modified_date = ?"
-                           "AND rfs_load_id > ?)"
-                           "ORDER BY modified_date rfs_load_id)"
+                           "AND rfs_load_id > ?))"
+                           "ORDER BY modified_date, rfs_load_id)"
                            "WHERE rownum <= ?"])
                   "2016/5/16"
                   "2017/8/21"
@@ -85,4 +96,10 @@
          :min-mod-date "2016/5/16"
          :mod-date "2017/8/21"
          :rfs-load-id 12345})
-      (is (= @actual expected)))))
+      (is (= (nth @actual 0) (nth expected 0)))
+      (is (= (nth @actual 1) (nth expected 1)))
+      (is (= (nth @actual 2) (nth expected 2)))
+      (is (= (nth @actual 3) (nth expected 3)))
+      (is (= (nth @actual 4) (nth expected 4)))
+      (is (= (nth @actual 5) (nth expected 5)))
+      )))

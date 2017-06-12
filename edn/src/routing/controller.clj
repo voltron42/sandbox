@@ -1,6 +1,5 @@
 (ns routing.controller
-  (:import (routing ServerException)
-           (org.apache.http HttpStatus)))
+  (:import (routing ServerException)))
 
 (def data (atom {}))
 
@@ -14,7 +13,7 @@
            (println (str "id: " id))
            (if (contains? @data id)
              (throw (ServerException.
-                      HttpStatus/SC_BAD_REQUEST
+                      400
                       (str "Record with id '" id "' already exists, cannot add record " employee)))
              (assoc @data id employee)))))
 
@@ -30,7 +29,7 @@
                  (if (contains? @data employee-id)
                    (assoc @data employee-id record)
                    (throw (ServerException.
-                            HttpStatus/SC_BAD_REQUEST
+                            400
                             (str "Record with id " employee-id " does not exist, cannot update record " record)))))))
 
 (defn delete-employee [employee-id] (reset! data (dissoc @data employee-id)))

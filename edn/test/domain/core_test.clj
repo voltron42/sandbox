@@ -85,7 +85,7 @@
                            }
                     })
 
-(deftest test-objectify
+(deftest test-objectify-small
   (is (= (objectify small-domain)
          [{:class-name :Artist
            :fields [{:field-name :name
@@ -102,7 +102,7 @@
                      :max-size 128}
                     {:field-name :year
                      :type :int
-                     :ordinality :optional}
+                     :cardinality :optional}
                     {:field-name :tracks
                      :type :Track
                      :cardinality :one-to-many}]}
@@ -114,6 +114,15 @@
                     {:field-name :duration
                      :type :duration
                      :cardinality :required}]}])))
+
+(deftest test-objectify-large
+  (is (= (objectify big-domain)
+         [{:class-name :Student
+           :fields [{:field-name :id
+                     :type :int
+                     :cardinality :required}
+                    ]
+           :id :id}])))
 
 (deftest test-sqlize-small
   (is (= (sqlize small-domain)
@@ -137,7 +146,7 @@
          );")))
 
 (deftest test-schemafy-small
-  (is (= (schemafy small-domain "Discography")
+  (is (= (schemafy small-domain "Discography" '*/Artist)
          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
          <xs:schema
          xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"

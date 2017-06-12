@@ -5,8 +5,7 @@
             [clojure.string :as s]
             [clojure.set :as set])
   (:import (java.io ByteArrayInputStream)
-           (routing ServerException)
-           (org.apache.http HttpStatus)))
+           (routing ServerException)))
 
 (defn step-match [step req-step]
   (or (keyword? step)
@@ -64,7 +63,7 @@
                        myfunc (if (contains? state func) (state func) (resolve func))]
                    (apply myfunc (map (partial resolve-expression state) args)))
     (or (keyword? expr) (symbol? expr)) (if (contains? state expr) (state expr) expr)
-    (string? expr) (keyword expr)
+    (string? expr) expr
     :else expr))
 
 (defn build-handler [expr ctrl]

@@ -1,12 +1,124 @@
 ["Five Languages:"
  {
   "HTTP Routing (https://eclipse.org/Xtext/documentation/206_httprouting.html)"
-  [[POST ["employee"] (ctrl/add-employee request/params)]
-   [GET ["employee" :id] (ctrl/get-employee :id)]
-   [GET ["employees"] (ctrl/get-employees request/params)]
-   [GET ["employees" :field :value] (ctrl/get-employees-by :field :value)]
-   [PUT ["employee" :id] (ctrl/update-employee :id request/params)]
-   [DELETE ["employee" :id] (ctrl/delete-employee :id)]]
+  [[GET ["guess" :theGuess] {} (ctrl/handle-guess :theGuess)]
+   [GET ["guess"] {} (ctrl/handle-guess (request/query "theGuess"))]
+   [GET [] {} (ctrl/handle-guess nil)]
+   [POST ["employee"] {"content-type" "application/json"} (ctrl/add-employee request/json)]
+   [POST ["employee"] {"content-type" "application/x-www-form-urlencoded"} (ctrl/add-employee request/params)]
+   [GET ["employee" :id] {} (ctrl/get-employee :id)]
+   [GET ["employees"] {} (ctrl/get-employees)]
+   [GET ["employees" :field :value] {} (ctrl/get-employees-by :field :value)]
+   [PUT ["employee" :id] {"content-type" "application/json"} (ctrl/update-employee :id request/json)]
+   [PUT ["employee" :id] {"content-type" "application/x-www-form-urlencoded"} (ctrl/update-employee :id request/params)]
+   [DELETE ["employee" :id] {} (ctrl/delete-employee :id)]]
+
+  "Domain Definition Language (https://eclipse.org/Xtext/documentation/204_mongodb.html)"
+  [
+   {
+    Artist {
+            name [text {:max-size 32}]
+            albums */Album
+            }
+    Album {
+           title [text {:max-size 128}]
+           year ?/int
+           tracks */Track
+           }
+    Track {
+           title [text {:max-size 128}]
+           duration duration
+           }
+    }
+   { Student [{
+               id int
+               first-name [text {:max-size 32}]
+               last-name [text {:max-size 32}]
+               }
+              {:id id}]
+    Enrollment [{
+                 student $/Student
+                 section $/Section
+                 }
+                {:unique [student section]}]
+    Course [{
+             code int
+             name [text {:max-size 32}]
+             description [text {:max-size 8196}]
+             credits [int {:min 1}]
+             department $/Department
+             }
+            {:id code}]
+    Prerequisite [{
+                   course $/Course
+                   prerequisite $/Course
+                   }
+                  {:unique [course prerequisite]}]
+    Department [{
+                 code int
+                 name [text {:max-size 64}]
+                 }
+                {:id code}]
+    Instructor [{
+                 id int
+                 first-name [text {:max-size 32}]
+                 last-name [text {:max-size 32}]
+                 department $/Department
+                 }
+                {:id id}]
+    Available-To-Instruct {
+                           course $/Course
+                           instructor $/Instructor
+                           }
+    Section [{
+              id int
+              term [Term {:format ":semester :year"}]
+              building $/Building
+              time time
+              course $/Course
+              instructor $/Instructor
+              room-number int
+              }
+             {:id id}]
+    Term {
+          year [int {:min 1900 :max 2100}]
+          semester [text "FALL" "SPRING" "SUMMER"]
+          }
+    Building {
+              name [text {:max-size 128}]
+              address Address
+              }
+    Address {
+             street1 [text {:max-size 128}]
+             street2 [?/text {:max-size 32}]
+             city [text {:max-size 128}]
+             state [text "WI" "MN" "AK"]
+             zip int
+             }
+    }
+   ]
+
+  "Query Language"
+  [{Select * From quantity_limit}
+   {Select {list_count (count *)} From form.formulary_load Where (file_load_id = :file-load-id)}
+   { Select w/*
+    From [l/form.formulary_load
+          Inner-Join w/form.formulary_webdav (= l/formulary_load_id w/formulary_load_id)]
+    Where (and (= l/management_status "A")
+            (<= l/effective_date :effective-date)
+            (= w/version :version)
+            (= w/rollup_drug_db :rollup-drug-db)
+            (= l/publisher :publisher)
+            (= l/list_id :list-id)
+            (= l/type :type)
+            (is-null l/sub_type))
+    Order-By [{l/effective_date desc}]}
+   { Select *
+    From form.rfs_load
+    Where (or (modified_date > :min-mod-date) (and (modified_date = :mod-date) (rfs_load_id > :rfs-load-id)))
+    Order-By [modified_date rfs_load_id]
+    Limit :limit}
+   ]
 
   "Build Language (https://eclipse.org/Xtext/documentation/203_builddsl.html)"
   [
@@ -31,100 +143,6 @@
            (delete :jar)
            ]
     }
-   ]
-
-  "Domain Definition Language (https://eclipse.org/Xtext/documentation/204_mongodb.html)"
-  [
-   {
-    Artist {
-            name text
-            albums */Album
-            }
-    Album {
-           title text
-           year int
-           tracks */Track
-           }
-    Track {
-           title text
-           duration duration
-           }
-    }
-   {
-    Student {
-             id int
-             first-name text
-             last-name text
-             enrollment */Section
-             }
-    Course {
-            code int
-            name text
-            description text
-            credits [int {:min 1}]
-            prerequisites */Course
-            department Department
-            }
-    Department {
-                code int
-                name text
-                }
-    Instructor {
-                id int
-                first-name text
-                last-name text
-                department Department
-                available-to-instruct */Course
-                }
-    Section {
-             id int
-             term Term
-             building Building
-             time Time
-             course Course
-             instructor Instructor
-             room-number int
-             }
-    Term {
-          year [int {:min 1900 :max 2100}]
-          semester [text "FALL" "SPRING" "SUMMER"]
-          }
-    Building {
-              name text
-              address Address
-              rooms */int
-              }
-    Address {
-             street1 text
-             street2 ?/text
-             city text
-             state [text "WI" "MN" ...]
-             zip int
-             }
-    }
-   ]
-
-  "Query Language"
-  [{Select * From quantity_limit}
-   {Select {list_count (count *)} From form.formulary_load Where (file_load_id = :file-load-id)}
-   { Select w/*
-    From [l/form.formulary_load
-          {Inner-Join w/form.formulary_webdav
-           On (l/formulary_load_id = w/formulary_load_id)}]
-    Where (and (l/management_status = "A")
-            (l/effective_date <= :effective-date)
-            (w/version = :version)
-            (w/rollup_drug_db = :rollup-drug-db)
-            (l/publisher = :publisher)
-            (l/list_id = :list-id)
-            (l/type = :type)
-            (l/sub_type is null))
-    Order-By [{l/effective_date desc}]}
-   { Select *
-    From form.rfs_load
-    Where (or (modified_date > :min-mod-date) (and (modified_date = :mod-date) (rfs_load_id > :rfs-load-id)))
-    Order-By [modified_date rfs_load_id]
-    Limit :limit}
    ]
 
   "Tortoise (https://eclipse.org/Xtext/documentation/208_tortoise.html)"

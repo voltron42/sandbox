@@ -1,9 +1,7 @@
 (ns routing.server
   (:require [routing.core :as rc]
             [routing.controller :as ctrl]
-            [org.httpkit.server :refer :all])
-  (:import (routing ServerException)
-           (org.apache.http HttpStatus)))
+            [org.httpkit.server :refer :all]))
 
 (def routings '[[GET ["guess" :theGuess] {} (ctrl/handle-guess :theGuess)]
                 [GET ["guess"] {} (ctrl/handle-guess (request/query "theGuess"))]

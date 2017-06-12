@@ -8,11 +8,11 @@
                       'Left-Outer-Join "LEFT OUTER JOIN"
                       'Right-Outer-Join "RIGHT OUTER JOIN"})
 
-(defn unary [term] #(str term "(" % ")"))
+(defn unary [term] #(str (s/upper-case term) "(" % ")"))
 
-(defn binary [term] #(str %1 " " term " " %2))
+(defn binary [term] #(str %1 " " (s/upper-case term) " " %2))
 
-(defn n-ary [term] #(str "(" (s/join (str " " term " ") (map str %&)) ")"))
+(defn n-ary [term] #(str "(" (s/join (str " " (s/upper-case term) " ") (map str %&)) ")"))
 
 (defn map-ops [fnc ops] (reduce #(assoc %1 %2 (fnc %2)) {} ops))
 
@@ -44,6 +44,7 @@
                            :params param-list})
     (symbol? expr) {:query (resolve-field expr) :params all-params}
     (keyword? expr) {:query "?" :params (concat all-params (vector expr))}
+    (string? expr) {:query (str "'" expr "'") :params all-params}
     :else {:query (str expr) :params all-params}))
 
 (defn- resolve-column [params column]
@@ -59,12 +60,12 @@
 (defn- resolve-sorter [column params]
   {:query (cond
             (symbol? column) (resolve-field column)
-            (map? column) (let [[[k v]] (into [] column)] (str (resolve-field k) (s/upper-case (name v)))))
+            (map? column) (let [[[k v]] (into [] column)] (str (resolve-field k) " " (s/upper-case (name v)))))
           :params params})
 
 (defn- resolve-join [[type table on] params]
   (let [{:keys [query params]} (resolve-expression on params)]
-    {:query (str (joins type) " " (resolve-table table) " " query) :params params}))
+    {:query (str (joins type) " " (resolve-table table) " ON " query) :params params}))
 
 (defn- resolve-where [clause params] (resolve-expression clause params))
 
@@ -75,7 +76,7 @@
                                      (let [prev-q query
                                            {:keys [query params]} (step-fn params elem)]
                                        {:query (concat prev-q (vector query))
-                                        :params}))
+                                        :params params}))
                                    {:query [] :params p}
                                    (list-fn q p))]
       {:query (wrap-fn (s/join delim query)) :params params})))
@@ -119,8 +120,13 @@
                     (number? limit) [(str limit) []])]
     {:query (str "SELECT * FROM (" query ") WHERE rownum <= " l) :params (concat params p)}))
 
+(defn- clean-space [statement]
+  (->> (s/split statement #" ")
+       (filter #(not (s/blank? %)))
+       (s/join " ")))
+
 (defn build-query [db q]
   (let [result (resolve-query q [])
-        {:keys [query params]} (if (contains? q 'Limit) result (resolve-limit result (q 'Limit)))]
+        {:keys [query params]} (if (contains? q 'Limit) (resolve-limit result (q 'Limit)) result)]
     (fn [argmap]
-      (apply jdbc/query (into [db (s/trim query)] (map #(argmap %) params))))))
+      (apply jdbc/query (into [db (clean-space query)] (map #(argmap %) params))))))

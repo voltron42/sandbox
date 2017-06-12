@@ -1,0 +1,6 @@
+["Extensible Data Notation"
+
+ 2 2.3 3/4 true {"a" 1 "b" 2}
+ :keyword + = java.io/File
+ (2 3 "a" :a)
+ ]
