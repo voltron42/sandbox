@@ -115,14 +115,85 @@
                      :type :duration
                      :cardinality :required}]}])))
 
+(deftest test-invert-cardinality
+  (is (= (invert-cardinality [{:class-name :Artist
+                               :fields [{:field-name :name
+                                         :type :text
+                                         :cardinality :required
+                                         :max-size 32}
+                                        {:field-name :albums
+                                         :type :Album
+                                         :cardinality :one-to-many}]}
+                              {:class-name :Album
+                               :fields [{:field-name :title
+                                         :type :text
+                                         :cardinality :required
+                                         :max-size 128}
+                                        {:field-name :year
+                                         :type :int
+                                         :cardinality :optional}
+                                        {:field-name :tracks
+                                         :type :Track
+                                         :cardinality :one-to-many}]}
+                              {:class-name :Track
+                               :fields [{:field-name :title
+                                         :type :text
+                                         :cardinality :required
+                                         :max-size 128}
+                                        {:field-name :duration
+                                         :type :duration
+                                         :cardinality :required}]}])
+         [{:class-name :Artist
+           :fields [{:field-name :name
+                     :type :text
+                     :cardinality :required
+                     :max-size 32}]}
+          {:class-name :Album
+           :fields [{:field-name :title
+                     :type :text
+                     :cardinality :required
+                     :max-size 128}
+                    {:field-name :year
+                     :type :int
+                     :cardinality :optional}
+                    {:field-name :artist_id
+                     :type :Artist
+                     :cardinality :ref}]}
+          {:class-name :Track
+           :fields [{:field-name :title
+                     :type :text
+                     :cardinality :required
+                     :max-size 128}
+                    {:field-name :duration
+                     :type :duration
+                     :cardinality :required}
+                    {:field-name :album_id
+                     :type :Album
+                     :cardinality :ref}]}])))
+
 (deftest test-objectify-large
   (is (= (objectify big-domain)
          [{:class-name :Student
            :fields [{:field-name :id
                      :type :int
                      :cardinality :required}
-                    ]
-           :id :id}])))
+                    {:field-name :first-name
+                     :type :text
+                     :cardinality :required
+                     :max-size 32}
+                    {:field-name :last-name
+                     :type :text
+                     :cardinality :required
+                     :max-size 32}]
+           :id :id}
+          {:class-name :Enrollment
+           :fields [{:field-name :student
+                     :type :Student
+                     :cardinality :ref}
+                    {:field-name :section
+                     :type :Section
+                     :cardinality :ref}]}
+          {}])))
 
 (deftest test-sqlize-small
   (is (= (sqlize small-domain)
@@ -146,7 +217,7 @@
          );")))
 
 (deftest test-schemafy-small
-  (is (= (schemafy small-domain "Discography" '*/Artist)
+  (is (= (schemafy small-domain "Discography" '[*/Artist])
          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
          <xs:schema
          xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"
@@ -155,13 +226,13 @@
          elementFormDefault=\"qualified\">
          <xs:element name=\"Discography\" type=\"Discography\"/>
          <xs:complexType name=\"Discography\">
-         <xs:sequence maxOccurs=\"unbounded\">
-         <xs:element name=\"Artist\" type=\"Artist\"/>
+         <xs:sequence>
+         <xs:element name=\"Artist\" type=\"Artist\" maxOccurs=\"unbounded\"/>
          </xs:sequence>
          </xs:complexType>
          <xs:complexType name=\"Artist\">
-         <xs:sequence maxOccurs=\"unbounded\">
-         <xs:element name=\"Album\" type=\"Album\"/>
+         <xs:sequence>
+         <xs:element name=\"Album\" type=\"Album\" maxOccurs=\"unbounded\"/>
          </xs:sequence>
          <xs:attribute name=\"name\" use=\"required\">
          <xs:simpleType>
@@ -172,8 +243,8 @@
          </xs:attribute>
          </xs:complexType>
          <xs:complexType name=\"Album\">
-         <xs:sequence maxOccurs=\"unbounded\">
-         <xs:element name=\"Track\" type=\"Track\"/>
+         <xs:sequence>
+         <xs:element name=\"Track\" type=\"Track\" maxOccurs=\"unbounded\"/>
          </xs:sequence>
          <xs:attribute name=\"title\" use=\"required\">
          <xs:simpleType>

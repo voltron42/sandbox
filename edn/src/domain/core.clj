@@ -1,7 +1,8 @@
 (ns domain.core
   (:require [clojure.xml :as xml]
             [clojure.string :as s]
-            [xml-short.core :refer [x-pand]]))
+            [xml-short.core :refer [x-pand]]
+            [clojure.set :as set]))
 
 (defn- describe-cardinality [cardinality]
   (if (nil? cardinality)
@@ -29,13 +30,46 @@
 
 (defn objectify [domain] (mapv classify domain))
 
+(defn- create-id [class-name]
+  (keyword (str (s/lower-case (name class-name)) "_id")))
+
+(defn- swap-fields [my-map class-name field-name type]
+  (println (str "class: " class-name ", " field-name ", " type))
+  (let [f-key-name (create-id class-name)
+        f-key {:field-name f-key-name
+               :type class-name
+               :cardinality :ref}
+        [from to] (map my-map [class-name type])
+        [from-fields to-fields] (map :fields [from to])
+        from-fields (dissoc from-fields field-name)
+        to-fields (assoc to-fields f-key-name f-key)
+        from (assoc from :fields from-fields)
+        to (assoc to :fields to-fields)]
+    (println (str "new foreign key: " f-key))
+    (assoc my-map class-name from type to)))
+
 (defn invert-cardinality [model]
-  (let [model-map (reduce #(assoc %1 (:class-name %2) %2) {} model)
-        ]
-    ))
+  (let [order (map :class-name model)
+        model-map (reduce
+                    (fn [out {:keys [class-name fields] :as class}]
+                      (assoc out class-name
+                        (assoc class :order (map :field-name fields) :fields
+                          (reduce
+                            (fn [field-map {:keys [field-name] :as field}]
+                              (assoc field-map field-name field)) {} fields))))
+                          {} model)
+        model-map (reduce (fn [my-model-map {:keys [class-name fields] :as class}]
+                            (reduce (fn [my-map {:keys [field-name type cardinality] :as field}]
+                                      (if (and (contains? my-map type) (= cardinality :one-to-many))
+                                        (swap-fields my-map class-name field-name type)
+                                        my-map)) my-model-map fields)) model-map model)]
+    (mapv #(let [{:keys [fields order] :as class} (model-map %)
+                new-fields (set/difference (set (keys fields)) (set order))
+                order (concat (filter (partial contains? fields) order) new-fields)]
+            (assoc (dissoc class :order) :fields (mapv fields order))) order)))
 
 (defn create-id-field [class-name]
-  {:name (keyword (str (s/lower-case class-name) "_id"))
+  {:field-name (create-id class-name)
    :type :id})
 
 (defn sqlize-cardinality [cardinality]
