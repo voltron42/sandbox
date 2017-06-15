@@ -150,10 +150,8 @@
    {square [[:length]
             [(for :x (1 ... 4)
                (forward :length)
-               (turn-right 90))
-             ]]}
-   [
-    (!= :length 150)
+               (turn-right 90))]]}
+   [(!= :length 150)
     (!= :diagonal (:length * (sqrt 2)))
     (!= :line-width 2)
     (square :length)
@@ -167,7 +165,21 @@
     (forward (:diagonal / 2))
     (turn-left 90)
     (!= :line-color "blue")
-    (forward :diagonal)
-    ]
-   ]}
+    (forward :diagonal)]]
+
+  "Template (https://eclipse.org/Xtext/documentation/207_template.html)"
+  [html {lang "en"}
+   [head
+    [meta {charset "utf-8"}]
+    [title :title]
+    [meta {name "viewport" content "width=device-width, initial-scale=1.0"}]
+    [meta {name "description" content :description}]
+    [meta {name "author" content :author}]]
+   [body
+    ({:sections :element}
+      [div {class "section"}
+       [h1 :element/title]
+       ((not-nil? :element/description)
+         [p :element/description])])]]
+  }
  ]
