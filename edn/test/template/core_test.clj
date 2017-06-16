@@ -14,7 +14,7 @@
                        ({:sections :element}
                          [div {class "section"}
                           [h1 :element/title]
-                          ((not-nil? :element/description)
+                          ((some? :element/description)
                             [p :element/description])])]]
         example-data {:title "This is the title"
                       :description "This is the description"
@@ -35,4 +35,4 @@
                            [div {class "section"}
                             [h1 "Section Two"]
                             [p "This is the description for section two"]]]]]
-        (is (= expected-result (((build-template-factory {'not-nil? some?}) example-tpl) example-data)))))
+        (is (= expected-result (((build-template-factory {'some? some?}) example-tpl) example-data)))))

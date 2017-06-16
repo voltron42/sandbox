@@ -19,7 +19,9 @@
                                     col (data col)
                                     results (reduce (fn [out elem]
                                                       (let [new-data (if (map? elem)
-                                                                       (reduce (fn [obj [k v]] (assoc obj (keyword (name label) (name k)) v)) data elem)
+                                                                       (reduce (fn [obj [k v]]
+                                                                                 (assoc obj (keyword (name label) (name k)) v))
+                                                                               data elem)
                                                                        (assoc data label elem))]
                                                         (reduce #(into %1 [(resolve-tpl op-map new-data [] %2)]) out args)))
                                                     out-data col)]
