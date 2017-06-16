@@ -36,3 +36,18 @@
                             [h1 "Section Two"]
                             [p "This is the description for section two"]]]]]
         (is (= expected-result (((build-template-factory {'not-nil? some?}) example-tpl) example-data)))))
+
+(def out '[html {lang "en"}
+           [head
+            [meta {charset "utf-8"}]
+            [title "This is the title"]
+            [meta {name "viewport" content "width=device-width, initial-scale=1.0"}]
+            [meta {name "description" content "This is the description"}]
+            [meta {name "author" content "I am the author"}]]
+           [body
+            [[div {class "section"}
+              [h1 "Section One"]
+              []]
+             [div {class "section"}
+              [h1 "Section Two"]
+              [[p "This is the description for section two"]]]]]])
