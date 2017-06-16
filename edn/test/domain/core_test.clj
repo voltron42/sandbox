@@ -1,6 +1,7 @@
 (ns domain.core-test
   (:require [clojure.test :refer :all]
-            [domain.core :refer :all]))
+            [domain.core :refer :all]
+            [clojure.pprint :as p]))
 
 (def big-domain '{ Student [{
                              id int
@@ -116,6 +117,7 @@
                      :cardinality :required}]}])))
 
 (deftest test-invert-cardinality
+  ()
   (is (= (invert-cardinality [{:class-name :Artist
                                :fields [{:field-name :name
                                          :type :text
@@ -232,7 +234,13 @@
          </xs:complexType>
          <xs:complexType name=\"Artist\">
          <xs:sequence>
+         <xs:element name=\"albums\">
+         <xs:complexType>
+         <xs:sequence>
          <xs:element name=\"Album\" type=\"Album\" maxOccurs=\"unbounded\"/>
+         </xs:sequence>
+         </xs:complexType>
+         </xs:element>
          </xs:sequence>
          <xs:attribute name=\"name\" use=\"required\">
          <xs:simpleType>
@@ -244,7 +252,13 @@
          </xs:complexType>
          <xs:complexType name=\"Album\">
          <xs:sequence>
-         <xs:element name=\"Track\" type=\"Track\" maxOccurs=\"unbounded\"/>
+         <xs:element name=\"tracks\">
+         <xs:complexType>
+         <xs:sequence>
+         <xs:element name=\"Track\" type=\"Track\" maxOccurs=\"unbounded\"/>\n
+         </xs:sequence>
+         </xs:complexType>
+         </xs:element>
          </xs:sequence>
          <xs:attribute name=\"title\" use=\"required\">
          <xs:simpleType>
