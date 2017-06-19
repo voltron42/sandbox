@@ -100,7 +100,7 @@
 
   "Query Language"
   [{Select * From quantity_limit}
-   {Select {list_count (count *)} From form.formulary_load Where (file_load_id = :file-load-id)}
+   {Select {list_count (count *)} From form.formulary_load Where (= file_load_id :file-load-id)}
    { Select w/*
     From [l/form.formulary_load
           Inner-Join w/form.formulary_webdav (= l/formulary_load_id w/formulary_load_id)]
@@ -113,7 +113,7 @@
             (= l/type :type)
             (is-null l/sub_type))
     Order-By [{l/effective_date desc}]}
-   { Select *
+   {Select *
     From form.rfs_load
     Where (or (modified_date > :min-mod-date) (and (modified_date = :mod-date) (rfs_load_id > :rfs-load-id)))
     Order-By [modified_date rfs_load_id]
@@ -181,5 +181,53 @@
        [h1 :element/title]
        ((not-nil? :element/description)
          [p :element/description])])]]
+
+  "Syntax/Grammar"
+  [{name "Domain Definition"
+    syntax/grammar {map/root {symbol/class-name #{map/class vector/class-and-constraints}}
+                    vector/class-and-constraints (map/class map/class-constraints)
+                    map/class {symbol/field-name #{symbol/type vector/field-constraints}}
+                    vector/field-constraints (symbol/type #{map/constraint-map (string/enum-option [& string/enum-option])})
+                    map/constraint-map {[:max-size] int/max-size
+                                        [:min] #{int/min-int}
+                                        [:max] #{int/max-int}
+                                        [:max] string/string-format}
+                    map/class-constraints {[:id] symbol/id
+                                           [:unique] vector/unique-fields}
+                    vector/unique-fields (symbol/unique-field [& symbol/unique-field])}}
+   {name "HTTP Routing"
+    syntax/grammar {vector/root (vector/routing [& vector/routing])
+                    vector/routing (symbol/method vector/path map/headers list/control-expression)
+                    symbol/method #{GET POST PUT DELETE PATCH}
+                    vector/path [& #{string/step keyword/path-var}]
+                    map/headers {string/header-name string/header-value}
+                    list/control-expression (symbol/func-name [& #{list/control-expression symbol/request-var keyword/path-var}])}}
+   {name "SQL Wrapper"
+    syntax/grammar {map/root {Select */select-clause
+                              [From] */from-clause
+                              [Where] list/where-clause
+                              [Order-By] */order-by-clause
+                              [Limit] #{int/limit keyword/var}}
+                    */select-clause #{vector/column-list */column-def *}
+                    */column-def #{map/complex-column symbol/column}
+                    vector/column-list (*/column-def [& */column-def])
+                    map/complex-column {symbol/column-alias #{symbol/column list/column-expression}
+                                        constraint/count 1}
+                    list/column-expression list/expression
+                    list/expression (symbol/operator [& #{symbol/column keyword/var list/expression}])
+                    */from-clause #{symbol/table vector/join}
+                    vector/join (symbol/table [& #{Inner-Join Left-Outer-Join Right-Outer-Join} symbol/table list/on-expression])
+                    list/on-expression list/expression
+                    list/where-clause list/expression
+                    */order-by-clause #{*/sort-column vector/sort-list}
+                    vector/sort-list (*/sort-column [& */sort-column])
+                    */sort-column #{symbol/column map/directed-column}
+                    map/directed-column {symbol/column #{asc desc}
+                                         constraint/count 1}
+                    }}
+   {name "XML Short"
+    syntax/grammar {vector/node (symbol/tag-name [map/attrs] [& #{vector/node symbol/tag-name string/value}])
+                    map/attrs {map/attr-name literal/attr-value}}}
+   ]
   }
  ]
