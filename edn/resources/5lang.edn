@@ -101,7 +101,7 @@
   "Query Language"
   [{Select * From quantity_limit}
    {Select {list_count (count *)} From form.formulary_load Where (= file_load_id :file-load-id)}
-   { Select w/*
+   {Select w/*
     From [l/form.formulary_load
           Inner-Join w/form.formulary_webdav (= l/formulary_load_id w/formulary_load_id)]
     Where (and (= l/management_status "A")
@@ -182,10 +182,17 @@
        ((not-nil? :element/description)
          [p :element/description])])]]
 
-  "Syntax/Grammar"
-  [{name "Domain Definition"
-    root map/classes
-    syntax/grammar {map/classes {symbol/class-name #{map/class vector/class-and-constraints}}
+  "Draw"
+  (draw [250 250]
+    (rect [25 25] [200 200] (fill :lime) (stroke-width 4) (stroke :pink))
+    (circle [125 125] 75 (fill :orange))
+    (polyline [[50 150] [50 200] [200 200] [200 100]] (stroke :red) (stroke-width 4) (fill :none))
+    (line [50 50] [200 200] (stroke :blue) (stroke-width 4)))
+
+  "Grammar/Syntax"
+  [{grammar/name "Domain Definition"
+    grammar/root map/classes
+    grammar/syntax {map/classes {symbol/class-name #{map/class vector/class-and-constraints}}
                     vector/class-and-constraints (map/class map/class-constraints)
                     map/class {symbol/field-name #{symbol/type vector/field-constraints}}
                     vector/field-constraints (symbol/type #{map/constraint-map (string/enum-option [& string/enum-option])})
@@ -196,17 +203,17 @@
                     map/class-constraints {[:id] symbol/id
                                            [:unique] vector/unique-fields}
                     vector/unique-fields (symbol/unique-field [& symbol/unique-field])}}
-   {name "HTTP Routing"
-    root vector/routings
-    syntax/grammar {vector/routings (vector/routing [& vector/routing])
+   {grammar/name "HTTP Routing"
+    grammar/root vector/routings
+    grammar/syntax {vector/routings (vector/routing [& vector/routing])
                     vector/routing (symbol/method vector/path map/headers list/control-expression)
                     symbol/method #{GET POST PUT DELETE PATCH}
                     vector/path [& #{string/step keyword/path-var}]
                     map/headers {string/header-name string/header-value}
                     list/control-expression (symbol/func-name [& #{list/control-expression symbol/request-var keyword/path-var}])}}
-   {name "SQL Wrapper"
-    root map/query
-    syntax/grammar {map/query {Select */select-clause
+   {grammar/name "SQL Wrapper"
+    grammar/root map/query
+    grammar/syntax {map/query {Select */select-clause
                               [From] */from-clause
                               [Where] list/where-clause
                               [Order-By] */order-by-clause
@@ -229,16 +236,18 @@
                     map/directed-column {symbol/column #{asc desc}
                                          constraint/count 1}
                     }}
-   {name "XML Short"
-    root vector/node
-    syntax/grammar {vector/node (symbol/tag-name [map/attrs] [& #{vector/node symbol/tag-name string/value}])
-                    map/attrs {map/attr-name literal/attr-value}}}
-   {name "Syntax / Grammar"
-    root map/grammar
-    syntax/grammar {map/grammar {name string/name
-                              root symbol/root-label
-                              symbol/syntax-grammar map/spec}
-                    symbol/syntax-grammar "syntax/grammar"
+   {grammar/name "XML Short"
+    grammar/root vector/node
+    grammar/syntax {vector/node (symbol/tag-name [map/attrs] [& #{vector/node symbol/tag-name string/value}])
+                    map/attrs {symbol/attr-name literal/attr-value}}}
+   {grammar/name "Syntax / Grammar"
+    grammar/root map/grammar
+    grammar/syntax {map/grammar {symbol/grammar-name string/name
+                                 symbol/grammar-root symbol/root-label
+                                 symbol/grammar-syntax map/spec}
+                    symbol/grammar-name "grammar/name"
+                    symbol/grammar-root "grammar/root"
+                    symbol/grammar-syntax "grammar/syntax"
                     map/spec {[symbol/wildcard-label] set/wildcard-spec
                               [symbol/map-label] */map-spec
                               [symbol/list-label] #{*/collection-spec symbol/list-label}

@@ -23,12 +23,6 @@
                         :update-employee  ctrl/update-employee
                         :delete-employee  ctrl/delete-employee}})
 
-(def app (try
-           (rc/build-app routings controller)
-           (catch Throwable t
-             (println (.getMessage t))
-             (.printStackTrace t))) )
-
 (defonce server (atom nil))
 
 (defn stop-server []
@@ -42,4 +36,9 @@
   ;; The #' is useful when you want to hot-reload code
   ;; You may want to take a look: https://github.com/clojure/tools.namespace
   ;; and http://http-kit.org/migration.html#reload
-  (reset! server (run-server #'app {:port 8080})))
+  (let [app (try
+              (rc/build-app routings controller)
+              (catch Throwable t
+                (println (.getMessage t))
+                (.printStackTrace t)))]
+    (reset! server (run-server #'app {:port 8080}))))
