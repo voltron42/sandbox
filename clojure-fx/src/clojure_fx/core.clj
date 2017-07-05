@@ -6,14 +6,15 @@
            (javafx.scene.layout Region GridPane HBox Pane StackPane)
            (javafx.scene.text Text)
            (javafx.scene.shape Shape)
-           (javafx.scene.paint Color)
+           (javafx.scene.paint Color Paint)
            (javafx.stage Stage)
            (javafx.scene Scene Parent Node Group)
            (javafx.application Platform)
            (com.sun.javafx.application PlatformImpl)
            (javafx.collections ObservableList)
            (javafx.animation Timeline KeyFrame KeyValue)
-           (javafx.util Duration)))
+           (javafx.util Duration)
+           (clojure.lang RT)))
 
 ;;http://docs.oracle.com/javafx/2/get_started/jfxpub-get_started.htm
 
@@ -81,7 +82,7 @@
 
 (defn- add-to-context [context {:keys [id]} obj]
   (when-not (nil? id)
-    (.setId obj id)
+    (.setId obj (name id))
     (reset! context (assoc @context id obj)))
   obj)
 
@@ -115,8 +116,9 @@
   (mapv (fn [{:keys [id build update class]}]
           (let [updater (apply build-updater update)
                 [new-fn children-fn child-fn] build
-                builder (apply build-builder (filter some? (vector new-fn updater children-fn child-fn)))]
-            {:id id :build builder :update updater :class class})) types))
+                builder (when-not (nil? build) (apply build-builder (filter some? (vector new-fn updater children-fn child-fn))))]
+            (reduce (fn [prev [k v]] (if (nil? v) prev (assoc prev k v))) {:update updater :class class} {:id id :build builder})
+            )) types))
 
 (def ^:private types (build-types structs))
 
@@ -160,32 +162,44 @@
 
 (defn- apply-to-timeline [animation-seq timeline]
   (mapv (fn [frames]
-          (reduce (fn [duration values]
+          (reduce (fn [_ [duration values]]
                     (.add (.getChildren timeline)
                           (KeyFrame. (if (keyword? duration)
                                        (Duration/valueOf (s/upper-case (name duration)))
                                        (Duration. duration))
                                      (into-array KeyValue
-                                                 (mapv (fn [prop val]
-                                                         (KeyValue. prop value))
+                                                 (mapv (fn [[prop val]]
+                                                         (KeyValue. prop val))
                                                        values)))))
                   nil frames))
         animation-seq))
 
+(defn- build-scene
+  ([^Parent root] (Scene. root))
+  ([^Parent root ^Paint fill] (Scene. root fill))
+  ([^Parent root ^Double width ^Double height] (Scene. root width height))
+  ([^Parent root ^Double width ^Double height ^Paint fill] (Scene. root width height fill))
+  )
+
 (defn launch-app
   ([^String title root] (launch-app title root nil nil))
-  ([^String title controller root] (launch-app title root controller nil))
+  ([^String title root controller] (launch-app title root controller nil))
   ([^String title root controller animate-fn] (println "initializing environment")
-                           (Platform/runLater #(let [{:keys [view context]} (build-view root)
-                                                     scene (Scene. view)
-                                                     stage (Stage.)
-                                                     timeline (Timeline.)]
-                                                 (when-not (nil? controller)
-                                                   (apply-controller context (controller context)))
-                                                 (.setScene stage scene)
-                                                 (.setTitle stage title)
-                                                 (when-not (nil? animate-fn)
-                                                   (apply-to-timeline (animate-fn context) timeline)
-                                                   (.play timeline))
-                                                 (.show stage)
-                                                 stage))))
+   (PlatformImpl/startup
+     (fn []
+       (println "is exit implicit? " (Platform/isImplicitExit))
+       (Platform/runLater
+         #(let [[{:keys [width height fill]} root] (if (map? (first root)) root [{} root])
+                {:keys [view context]} (build-view root)
+                scene (apply build-scene (filter (fn [arg] (not (nil? arg))) [view width height fill]))
+                stage (Stage.)
+                timeline (Timeline.)]
+            (when-not (nil? controller)
+              (apply-controller context (controller context)))
+            (.setScene stage scene)
+            (.setTitle stage title)
+            (when-not (nil? animate-fn)
+              (apply-to-timeline (animate-fn context) timeline)
+              (.play timeline))
+            (.show stage)
+            stage))))))
