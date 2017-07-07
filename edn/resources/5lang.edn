@@ -1,5 +1,10 @@
 ["Five Languages:"
  {
+  "Pixelart"
+  {:#000 [E/a F/a G/a H/a I/a D/b J/b K/b C/c I/c L/c B/d E/d H/d L/d M/d N/d A/e D/e F/e G/e K/e L/e M/e]
+   :#090 [E/b F/b G/b I/b D/c E/c H/c C/d D/d F/d G/d K/d B/e C/e J/e]
+   :#aff [H/b F/c G/c J/c K/c I/d J/d E/e H/e I/e ]}
+
   "HTTP Routing (https://eclipse.org/Xtext/documentation/206_httprouting.html)"
   [[GET ["guess" :theGuess] {} (ctrl/handle-guess :theGuess)]
    [GET ["guess"] {} (ctrl/handle-guess (request/query "theGuess"))]
