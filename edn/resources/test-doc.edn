@@ -1,7 +1,5 @@
-[[:rect {:x 18 :y 36 :width 576 :height 720 :stroke "black" :fill "white"}]
- [:rect {:x 25 :y 61 :rx 10 :ry 10 :width 238 :height 36 :fill "none" :stroke "black"}]
- [:rect {:x 248 :y 47 :rx 10 :ry 10 :width 338 :height 65 :fill "white" :stroke "black"}]
- [:text {:x 32 :y 58 :fill "black" :stroke "black" :font-size "16pt" :font-weight "bold" :font-family "Times, serif"} "DUNGEONS + DRAGONS"]
- [:text {:x 137 :y 84 :fill "black" :font-size "18pt" :font-weight "bold" :font-family "Helvetica" :text-anchor "middle"} "(character_name)"]
-
- ]
+[[[:rect {:x 18 :y 36 :width 576 :height 720 :stroke "black" :fill "white"}]
+  [:rect {:x 25 :y 61 :rx 10 :ry 10 :width 238 :height 36 :fill "none" :stroke "black"}]
+  [:rect {:x 248 :y 47 :rx 10 :ry 10 :width 338 :height 65 :fill "white" :stroke "black"}]
+  [:text {:x 32 :y 58 :fill "black" :stroke "black" :font-size "16pt" :font-weight "bold" :font-family "Times, serif"} "DUNGEONS + DRAGONS"]
+  [:text {:x 137 :y 84 :fill "black" :font-size "18pt" :font-weight "bold" :font-family "Helvetica" :text-anchor "middle"} "(character_name)"]]]
