@@ -24,41 +24,49 @@
   ([cx cy r] (make-circle cx cy r {}))
   ([cx cy r opts] [:circle (into opts {:cx cx :cy cy :r r})]))
 
-(defn read-short [shape]
-  (let [label (first shape)
-        func ({:text make-text
-               :line make-line
-               :rect make-rect
-               :circle make-circle} label)
-        args (rest shape)]
-    (apply func args)))
+(def ^:private svg-outer-args #{:under :translate :scale :rotate})
+(def ^:private svg-inner-args #{:width :height :viewBox})
+
+(def ^:private svg-funcs {:text make-text :line make-line :rect make-rect :circle make-circle})
+
+(defn read-funcs [func-map]
+  (fn [shape]
+    (let [label (first shape)
+          func (func-map label)
+          args (rest shape)]
+      (if (nil? func)
+        shape
+        (apply func args)))))
+
+(def read-svg (read-funcs svg-funcs))
+
+(defn make-svg [opts & args]
+  (let [outer (select-keys opts svg-outer-args)
+        inner (select-keys opts svg-inner-args)
+        svg-text (->> args
+                      (map read-svg)
+                      (into [:svg (into {:xmlns "http://www.w3.org/2000/svg"} inner)])
+                      (x-pand)
+                      (xml/emit-element)
+                      (with-out-str)
+                      (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE svg>"))]
+    [:svg outer svg-text]))
+
+(def ^:private pdf-funcs {:svg make-svg})
+
+(def read-pdf (read-funcs pdf-funcs))
 
 (defn -main [& [in out]]
-  (try
-    (pdf
-      (into [{:left-margin 18
-              :right-margin 18
-              :top-margin 36
-              :bottom-margin 36
-              :size :letter
-              :footer false}]
-            (interpose [:pagebreak]
-                       (map (fn [block]
-                              [:svg {:under true}
-                               (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE svg>"
-                                    (with-out-str
-                                      (xml/emit-element
-                                        (x-pand
-                                          (into [:svg {:xmlns "http://www.w3.org/2000/svg"
-                                                       :width 612
-                                                       :height 792}]
-                                                (map read-short block))))))])
-                            (->> in
-                                 (io/resource)
-                                 (.toString)
-                                 (slurp)
-                                 (edn/read-string)))))
-      (io/output-stream (io/file (io/resource "") out)))
-    (catch Exception e
-      (println (.getMessage e))
-      (.printStackTrace e))))
+    (try
+      (let [[opts & doc]  (->> in
+                               (io/resource)
+                               (.toString)
+                               (slurp)
+                               (edn/read-string))]
+        (->> out
+             (io/file (io/resource ""))
+             (io/output-stream)
+             (pdf (into [opts] (map read-pdf doc)))))
+      (catch Exception e
+        (println (.getMessage e))
+        (.printStackTrace e))))

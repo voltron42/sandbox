@@ -1,5 +1,14 @@
-[[[:rect 18 36 576 720 {:stroke "black" :fill "white"}]
+[{:left-margin 18
+  :top-margin 36
+  :right-margin 18
+  :bottom-margin 36
+  :size :letter
+  :footer false}
+ [:svg {:under true
+        :width 612
+        :height 792}
+  [:rect 18 36 576 720 {:stroke "black" :fill "white"}]
   [:rect 25 61 238 36 10 10 {:fill "none" :stroke "black"}]
   [:rect 248 47 338 65 10 10 {:fill "white" :stroke "black"}]
-  [:text "DUNGEONS + DRAGONS" 32 58 {:fill "black" :stroke "black" :font-size "16pt" :font-weight "bold" :font-family "Times, serif"}]
-  [:text "(character_name)" 137 84 {:fill "black" :font-size "18pt" :font-weight "bold" :font-family "Helvetica" :text-anchor "middle"}]]]
+  [:text "DUNGEONS &amp; DRAGONS" 22 55 {:fill "black" :stroke "black" :font-size "14pt" :font-weight "bold" :font-family "Times, serif"}]
+  [:text "(character_name)" 135 84 {:fill "black" :font-size "16pt" :font-weight "bold" :font-family "Helvetica" :text-anchor "middle"}]]]
