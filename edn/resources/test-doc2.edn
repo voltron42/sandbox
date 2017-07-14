@@ -1,0 +1,286 @@
+[{:size :letter
+  :footer false
+  :header false}
+ [:svg {:under true
+        :width 612
+        :height 792
+        :viewBox "-25 -25 850 1100"}
+  [:rect 0 0 800 1050 {:stroke "black" :fill "white"}]
+  [:rect 10 35 330 50 10 10 {:fill "none" :stroke "black"}]
+  [:rect 320 15 470 90 10 10 {:fill "white" :stroke "black"}]
+  [:text "DUNGEONS &amp; DRAGONS" 20 30 {:fill "black" :stroke "black" :font-size "16pt" :font-weight "bold" :font-family "Times, serif"}]
+  [:text "(character_name)" 165 66 {:fill "black" :font-size "18pt" :font-weight "bold" :font-family "Helvetica" :text-anchor "middle"}]
+  [:text "CHARACTER NAME" 30 100 {:fill "black" :font-size "8pt" :font-weight "bold" :font-family "Helvetica"}]
+  [:line 325 42 785 42 {:stroke "black"}]
+  [:text "CLASS &amp; LEVEL" 330 55 {:fill "black" :font-size "8pt" :font-weight "bold" :font-family "Helvetica"}]
+  [:text "{class_level_list}" 330 35 {:fill "black" :font-size "11pt" :font-weight "bold" :font-family "Helvetica"}]
+  [:text "BACKGROUND" 480 55 {:fill "black" :font-size "8pt" :font-weight "bold" :font-family "Helvetica"}]
+  [:text "{background}" 480 35 {:fill "black" :font-size "11pt" :font-weight "bold" :font-family "Helvetica"}]
+  [:text "PLAYER NAME" 630 55 {:fill "black" :font-size "8pt" :font-weight "bold" :font-family "Helvetica"}]
+  [:text "{player}" 630 35 {:fill "black" :font-size "11pt" :font-weight "bold" :font-family "Helvetica"}]
+  [:line 325 87 785 87 {:stroke "black"}]
+  [:text "RACE" 330 100 {:fill "black" :font-size "8pt" :font-weight "bold" :font-family "Helvetica"}]
+  [:text "{race}" 330 80 {:fill "black" :font-size "11pt" :font-weight "bold" :font-family "Helvetica"}]
+  [:text "ALIGNMENT" 480 100 {:fill "black" :font-size "8pt" :font-weight "bold" :font-family "Helvetica"}]
+  [:text "{alignment}" 480 80 {:fill "black" :font-size "11pt" :font-weight "bold" :font-family "Helvetica"}]
+  [:text "EXPERIENCE" 630 100 {:fill "black" :font-size "8pt" :font-weight "bold" :font-family "Helvetica"}]
+  [:text "{xp}" 630 80 {:fill "black" :font-size "11pt" :font-weight "bold" :font-family "Helvetica"}]
+
+  [:rect 11 125 96 616 10 10 {:fill "#DDD" :stroke "black"}]
+
+  [:rect 21 135 76 76 10 10 {:fill "white" :stroke "black"}]
+  [:rect 36 196 46 30 10 10 {:fill "white" :stroke "black"}]
+  [:text "STRENGTH" 59 145 {:fill "black" :font-size "6pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:text "{str_md}" 59 175 {:fill "black" :font-size "12pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:text "{str}" 59 213 {:fill "black" :font-size "10pt" :font-family "Helvetica" :text-anchor "middle"}]
+
+  [:rect 21 236 76 76 10 10 {:fill "white" :stroke "black"}]
+  [:rect 36 297 46 30 10 10 {:fill "white" :stroke "black"}]
+  [:text "DEXTERITY" 59 246 {:fill "black" :font-size "6pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:text "{dex_md}" 59 276 {:fill "black" :font-size "12pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:text "{dex}" 59 314 {:fill "black" :font-size "10pt" :font-family "Helvetica" :text-anchor "middle"}]
+
+  [:rect 21 337 76 76 10 10 {:fill "white" :stroke "black"}]
+  [:rect 36 398 46 30 10 10 {:fill "white" :stroke "black"}]
+  [:text "CONSTITUTION" 59 347 {:fill "black" :font-size "6pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:text "{con_md}" 59 377 {:fill "black" :font-size "12pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:text "{con}" 59 415 {:fill "black" :font-size "10pt" :font-family "Helvetica" :text-anchor "middle"}]
+
+  [:rect 21 438 76 76 10 10 {:fill "white" :stroke "black"}]
+  [:rect 36 499 46 30 10 10 {:fill "white" :stroke "black"}]
+  [:text "INTELLIGENCE" 59 448 {:fill "black" :font-size "6pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:text "{int_md}" 59 478 {:fill "black" :font-size "12pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:text "{int}" 59 516 {:fill "black" :font-size "10pt" :font-family "Helvetica" :text-anchor "middle"}]
+
+  [:rect 21 539 76 76 10 10 {:fill "white" :stroke "black"}]
+  [:rect 36 600 46 30 10 10 {:fill "white" :stroke "black"}]
+  [:text "WISDOM" 59 549 {:fill "black" :font-size "6pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:text "{wis_md}" 59 579 {:fill "black" :font-size "12pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:text "{wis}" 59 617 {:fill "black" :font-size "10pt" :font-family "Helvetica" :text-anchor "middle"}]
+
+  [:rect 21 640 76 76 10 10 {:fill "white" :stroke "black"}]
+  [:rect 36 701 46 30 10 10 {:fill "white" :stroke "black"}]
+  [:text "CHARISMA" 59 650 {:fill "black" :font-size "6pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:text "{cha_md}" 59 680 {:fill "black" :font-size "12pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:text "{cha}" 59 718 {:fill "black" :font-size "10pt" :font-family "Helvetica" :text-anchor "middle"}]
+
+  [:rect 124 130 139 20 5 5 {:fill "white" :stroke "black"}]
+  [:rect 119 125 40 30 5 5 {:fill "white" :stroke "black"}]
+  [:text "{insp}" 139 145 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:text "INSPIRATION" 206 145 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+
+  [:rect 124 168 139 20 5 5 {:fill "white" :stroke "black"}]
+  [:rect 119 163 40 30 5 5 {:fill "white" :stroke "black"}]
+  [:text "{prof}" 139 183 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:text "PROFICIENCY" 206 183 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+
+  [:rect 119 202 144 143 10 10 {:fill "white" :stroke "black"}]
+
+  [:circle 135 217 8 {:fill "white" :stroke "black"}]
+  [:circle 135 217 4 {:fill "black" :stroke "black"}]
+  [:line 145 225 183 225 {:stroke "black"}]
+  [:text "{str_s}" 147 220 {:fill "black" :font-size "7pt" :font-family "Helvetica"}]
+  [:text "STRENGTH" 185 220 {:fill "black" :font-size "7pt" :font-family "Helvetica"}]
+
+  [:circle 135 237 8 {:fill "white" :stroke "black"}]
+  [:line 145 245 183 245 {:stroke "black"}]
+  [:text "{dex_s}" 147 240 {:fill "black" :font-size "7pt" :font-family "Helvetica"}]
+  [:text "DEXTERITY" 185 240 {:fill "black" :font-size "7pt" :font-family "Helvetica"}]
+
+  [:circle 135 257 8 {:fill "white" :stroke "black"}]
+  [:line 145 265 183 265 {:stroke "black"}]
+  [:text "{con_s}" 147 260 {:fill "black" :font-size "7pt" :font-family "Helvetica"}]
+  [:text "CONSTITUTION" 185 260 {:fill "black" :font-size "7pt" :font-family "Helvetica"}]
+
+  [:circle 135 277 8 {:fill "white" :stroke "black"}]
+  [:line 145 285 183 285 {:stroke "black"}]
+  [:text "{int_s}" 147 280 {:fill "black" :font-size "7pt" :font-family "Helvetica"}]
+  [:text "INTELLIGENCE" 185 280 {:fill "black" :font-size "7pt" :font-family "Helvetica"}]
+
+  [:circle 135 297 8 {:fill "white" :stroke "black"}]
+  [:line 145 305 183 305 {:stroke "black"}]
+  [:text "{wis_s}" 147 300 {:fill "black" :font-size "7pt" :font-family "Helvetica"}]
+  [:text "WISDOM" 185 300 {:fill "black" :font-size "7pt" :font-family "Helvetica"}]
+
+  [:circle 135 317 8 {:fill "white" :stroke "black"}]
+  [:line 145 325 183 325 {:stroke "black"}]
+  [:text "{cha_s}" 147 320 {:fill "black" :font-size "7pt" :font-family "Helvetica"}]
+  [:text "CHARISMA" 185 320 {:fill "black" :font-size "7pt" :font-family "Helvetica"}]
+
+  [:text "SAVING THROWS" 191 340 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+
+  [:rect 119 355 144 386 10 10 {:fill "white" :stroke "black"}]
+
+  [:circle 135 372 6 {:fill "white" :stroke "black"}]
+  [:circle 135 372 3 {:fill "black" :stroke "black"}]
+  [:line 145 378 173 378 {:stroke "black"}]
+  [:text "{acro}" 147 374 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+  [:text "Acrobatics (DEX)" 175 374 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+
+  [:circle 135 392 6 {:fill "white" :stroke "black"}]
+  [:line 145 398 173 398 {:stroke "black"}]
+  [:text "{anim}" 147 394 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+  [:text "Animal Handling (WIS)" 175 394 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+
+  [:circle 135 412 6 {:fill "white" :stroke "black"}]
+  [:line 145 418 173 418 {:stroke "black"}]
+  [:text "{arca}" 147 414 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+  [:text "Arcana (INT)" 175 414 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+
+  [:circle 135 432 6 {:fill "white" :stroke "black"}]
+  [:line 145 438 173 438 {:stroke "black"}]
+  [:text "{athl}" 147 434 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+  [:text "Athletics (STR)" 175 434 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+
+  [:circle 135 452 6 {:fill "white" :stroke "black"}]
+  [:line 145 458 173 458 {:stroke "black"}]
+  [:text "{decp}" 147 454 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+  [:text "Deception (CHA)" 175 454 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+
+  [:circle 135 472 6 {:fill "white" :stroke "black"}]
+  [:line 145 478 173 478 {:stroke "black"}]
+  [:text "{hist}" 147 474 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+  [:text "History (INT)" 175 474 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+
+  [:circle 135 492 6 {:fill "white" :stroke "black"}]
+  [:line 145 498 173 498 {:stroke "black"}]
+  [:text "{nsit}" 147 494 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+  [:text "Insight (WIS)" 175 494 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+
+  [:circle 135 512 6 {:fill "white" :stroke "black"}]
+  [:line 145 518 173 518 {:stroke "black"}]
+  [:text "{ntim}" 147 514 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+  [:text "Intimidation (CHA)" 175 514 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+
+  [:circle 135 532 6 {:fill "white" :stroke "black"}]
+  [:line 145 538 173 538 {:stroke "black"}]
+  [:text "{nvst}" 147 534 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+  [:text "Investigation (INT)" 175 534 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+
+  [:circle 135 552 6 {:fill "white" :stroke "black"}]
+  [:line 145 558 173 558 {:stroke "black"}]
+  [:text "{med}" 147 554 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+  [:text "Medicine (WIS)" 175 554 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+
+  [:circle 135 572 6 {:fill "white" :stroke "black"}]
+  [:line 145 578 173 578 {:stroke "black"}]
+  [:text "{nat}" 147 574 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+  [:text "Nature (INT)" 175 574 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+
+  [:circle 135 592 6 {:fill "white" :stroke "black"}]
+  [:line 145 598 173 598 {:stroke "black"}]
+  [:text "{prcp}" 147 594 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+  [:text "Perception (WIS)" 175 594 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+
+  [:circle 135 612 6 {:fill "white" :stroke "black"}]
+  [:line 145 618 173 618 {:stroke "black"}]
+  [:text "{perf}" 147 614 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+  [:text "Performance (CHA)" 175 614 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+
+  [:circle 135 632 6 {:fill "white" :stroke "black"}]
+  [:line 145 638 173 638 {:stroke "black"}]
+  [:text "{prsu}" 147 634 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+  [:text "Persuasion (CHA)" 175 634 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+
+  [:circle 135 652 6 {:fill "white" :stroke "black"}]
+  [:line 145 658 173 658 {:stroke "black"}]
+  [:text "{rlig}" 147 654 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+  [:text "Religion (INT)" 175 654 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+
+  [:circle 135 672 6 {:fill "white" :stroke "black"}]
+  [:line 145 678 173 678 {:stroke "black"}]
+  [:text "{loh}" 147 674 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+  [:text "Sleight Of Hand (DEX)" 175 674 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+
+  [:circle 135 692 6 {:fill "white" :stroke "black"}]
+  [:line 145 698 173 698 {:stroke "black"}]
+  [:text "{stlh}" 147 694 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+  [:text "Stealth (DEX)" 175 694 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+
+  [:circle 135 712 6 {:fill "white" :stroke "black"}]
+  [:line 145 718 173 718 {:stroke "black"}]
+  [:text "{surv}" 147 714 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+  [:text "Survival (WIS)" 175 714 {:fill "black" :font-size "6pt" :font-family "Helvetica"}]
+
+  [:text "SKILLS" 191 735 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+
+  [:rect 20 760 240 20 5 5 {:fill "white" :stroke "black"}]
+  [:rect 15 755 40 30 5 5 {:fill "white" :stroke "black"}]
+  [:text "{pp}" 35 772 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:text "PASSIVE PERCEPTION" 162 774 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+
+  [:rect 11 795 252 245 {:fill "white" :stroke "black"}]
+  [:text "OTHER PROFICIENCIES &amp; LANGUAGES" 137 1035 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+
+  [:rect 274 125 252 308 10 10 {:fill "#DDD" :stroke "black"}]
+
+  [:poly [[320 200] [284 155] [302 135] [339 135] [356 155]] {:fill "white" :stroke "black"}]
+  [:text "ARMOR" 320 146 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:text "CLASS" 320 155 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:text "{ac}" 320 175 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+
+  [:rect 364 135 72 64 10 10 {:fill "white" :stroke "black"}]
+  [:text "INITIATIVE" 400 146 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:text "{init}" 400 175 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+
+  [:rect 444 135 72 64 10 10 {:fill "white" :stroke "black"}]
+  [:text "SPEED" 480 146 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:text "{spd}" 480 175 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+
+  [:rect 284 209 232 64 10 10 {:fill "white" :stroke "black"}]
+  [:text "Maximum Hit Points" 289 219 {:fill "black" :font-size "6pt" :font-family "Helvetica" :text-anchor "start"}]
+  [:text "{maxhp}" 435 216 {:fill "black" :font-size "6pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:line 360 219 511 219 {:stroke "black"}]
+  [:text "{hp}" 400 244 {:fill "black" :font-size "6pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:text "CURRENT HIT POINTS" 400 269 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+
+  [:rect 284 283 232 64 10 10 {:fill "white" :stroke "black"}]
+  [:text "{tempHP}" 400 317 {:fill "black" :font-size "6pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:text "{tempHP}" 400 343 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+
+  [:rect 284 357 111 64 10 10 {:fill "white" :stroke "black"}]
+  [:text "TOTAL" 289 369 {:fill "black" :font-size "6pt" :font-family "Helvetica" :text-anchor "start"}]
+  [:text "{total}" 352 366 {:fill "black" :font-size "6pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:line 317 369 390 369 {:stroke "black"}]
+  [:text "{hitdice}" 339 393 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:text "HIT DICE" 339 417 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+
+  [:rect 405 357 111 64 10 10 {:fill "white" :stroke "black"}]
+  [:text "SUCCESSES" 458 381 {:fill "black" :font-size "6pt" :font-family "Helvetica" :text-anchor "end"}]
+  [:text "FAILURES" 458 402 {:fill "black" :font-size "6pt" :font-family "Helvetica" :text-anchor "end"}]
+  [:circle 505 378 7 {:fill "white" :stroke "black"}]
+  [:circle 505 399 7 {:fill "white" :stroke "black"}]
+  [:circle 487 378 7 {:fill "white" :stroke "black"}]
+  [:circle 487 399 7 {:fill "white" :stroke "black"}]
+  [:circle 469 378 7 {:fill "white" :stroke "black"}]
+  [:circle 469 399 7 {:fill "white" :stroke "black"}]
+
+  [:rect 274 443 252 298 10 10 {:fill "none" :stroke "black"}]
+  [:text "ATTACKS &amp; SPELLCASTING" 400 736 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+
+  [:rect 274 751 252 288 10 10 {:fill "none" :stroke "black"}]
+  [:text "EQUIPMENT" 400 1035 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+
+  [:rect 537 125 252 308 10 10 {:fill "#DDD" :stroke "black"}]
+  [:rect 547 135 232 64 10 10 {:fill "white" :stroke "black"}]
+  [:text "{personality}" 663 164 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:text "PERSONALITY TRAITS" 663 194 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:rect 547 209 232 64 10 10 {:fill "white" :stroke "black"}]
+  [:text "{ideals}" 663 238 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:text "IDEALS" 663 268 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:rect 547 283 232 64 10 10 {:fill "white" :stroke "black"}]
+  [:text "{bonds}" 663 312 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:text "BONDS" 663 342 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:rect 547 357 232 64 10 10 {:fill "white" :stroke "black"}]
+  [:text "{flaws}" 663 386 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:text "FLAWS" 663 416 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+
+  [:rect 537 443 252 596 10 10 {:fill "none" :stroke "black"}]
+  [:text "FEATURES &amp; TRAITS" 663 1035 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+  ]
+ [:pagebreak]
+ [:svg {:under true
+        :width 612
+        :height 792
+        :viewBox "-25 -25 850 1100"}
+  [:rect 0 0 800 1050 {:fill "none" :stroke "black"}]]]

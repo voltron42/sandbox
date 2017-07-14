@@ -3,8 +3,9 @@
             [clojure.edn :as edn]
             [clojure.java.io :as io]
             [clojure.xml :as xml]
-            [xml-short.core :refer :all])
-  (:import (java.io File FileInputStream)))
+            [xml-short.core :refer :all]
+            [clojure.string :as s])
+  (:import (java.io File FileInputStream FileNotFoundException)))
 
 (defn make-text
   ([text x y] (make-text text x y {}))
@@ -24,10 +25,14 @@
   ([cx cy r] (make-circle cx cy r {}))
   ([cx cy r opts] [:circle (into opts {:cx cx :cy cy :r r})]))
 
+(defn make-poly
+  ([points] (make-poly points {}))
+  ([points opts] [:polygon (into opts {:points (s/join " " (map (partial s/join ",") points))})]))
+
 (def ^:private svg-outer-args #{:under :translate :scale :rotate})
 (def ^:private svg-inner-args #{:width :height :viewBox})
 
-(def ^:private svg-funcs {:text make-text :line make-line :rect make-rect :circle make-circle})
+(def ^:private svg-funcs {:text make-text :line make-line :rect make-rect :circle make-circle :poly make-poly})
 
 (defn read-funcs [func-map]
   (fn [shape]
@@ -66,7 +71,12 @@
         (->> out
              (io/file (io/resource ""))
              (io/output-stream)
-             (pdf (into [opts] (map read-pdf doc)))))
+             (pdf (into [opts] (map read-pdf doc))))
+        "Completed")
+      (catch FileNotFoundException fe
+        (println "Cannot process")
+        (println (.getMessage fe))
+        )
       (catch Exception e
         (println (.getMessage e))
         (.printStackTrace e))))
