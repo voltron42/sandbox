@@ -9,7 +9,7 @@
   [:rect 10 35 330 50 10 10 {:fill "none" :stroke "black"}]
   [:rect 320 15 470 90 10 10 {:fill "white" :stroke "black"}]
   [:text "DUNGEONS &amp; DRAGONS" 20 30 {:fill "black" :stroke "black" :font-size "16pt" :font-weight "bold" :font-family "Times, serif"}]
-  [:text "(character_name)" 165 66 {:fill "black" :font-size "18pt" :font-weight "bold" :font-family "Helvetica" :text-anchor "middle"}]
+  [:text "{character_name}" 165 66 {:fill "black" :font-size "18pt" :font-weight "bold" :font-family "Helvetica" :text-anchor "middle"}]
   [:text "CHARACTER NAME" 30 100 {:fill "black" :font-size "8pt" :font-weight "bold" :font-family "Helvetica"}]
   [:line 325 42 785 42 {:stroke "black"}]
   [:text "CLASS &amp; LEVEL" 330 55 {:fill "black" :font-size "8pt" :font-weight "bold" :font-family "Helvetica"}]
@@ -261,6 +261,7 @@
   [:rect 274 751 252 288 10 10 {:fill "none" :stroke "black"}]
   [:text "EQUIPMENT" 400 1035 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
 
+
   [:rect 537 125 252 308 10 10 {:fill "#DDD" :stroke "black"}]
   [:rect 547 135 232 64 10 10 {:fill "white" :stroke "black"}]
   [:text "{personality}" 663 164 {:fill "black" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
@@ -283,4 +284,48 @@
         :width 612
         :height 792
         :viewBox "-25 -25 850 1100"}
-  [:rect 0 0 800 1050 {:fill "none" :stroke "black"}]]]
+  [:rect 0 0 800 1050 {:fill "none" :stroke "black"}]
+  [:rect 10 35 330 50 10 10 {:fill "none" :stroke "black"}]
+  [:rect 320 15 470 90 10 10 {:fill "white" :stroke "black"}]
+  [:text "D&amp;D" 20 30 {:fill "black" :stroke "black" :font-size "16pt" :font-weight "bold" :font-family "Times, serif"}]
+  [:text "{character_name}" 165 67 {:fill "black" :font-weight "bold" :font-size "18pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:text "CHARACTER NAME" 20 100 {:fill "black" :font-weight "bold" :font-size "8pt" :font-family "Helvetica"}]
+  [:line 325 47 785 47 {:stroke "black"}]
+  [:text "AGE" 330 60 {:fill "black" :font-weight "bold" :font-size "8pt" :font-family "Helvetica"}]
+  [:text "{age}" 330 30 {:fill "black" :font-weight "bold" :font-size "11pt" :font-family "Helvetica"}]
+  [:text "HEIGHT" 480 60 {:fill "black" :font-weight "bold" :font-size "8pt" :font-family "Helvetica"}]
+  [:text "{height}" 480 30 {:fill "black" :font-weight "bold" :font-size "11pt" :font-family "Helvetica"}]
+  [:text "WEIGHT" 630 60 {:fill "black" :font-weight "bold" :font-size "8pt" :font-family "Helvetica"}]
+  [:text "{weight}" 630 30 {:fill "black" :font-weight "bold" :font-size "11pt" :font-family "Helvetica"}]
+  [:line 325 87 785 87 {:stroke "black"}]
+  [:text "EYES" 330 100 {:fill "black" :font-weight "bold" :font-size "8pt" :font-family "Helvetica"}]
+  [:text "{eyes}" 330 75 {:fill "black" :font-weight "bold" :font-size "11pt" :font-family "Helvetica"}]
+  [:text "SKIN" 480 100 {:fill "black" :font-weight "bold" :font-size "8pt" :font-family "Helvetica"}]
+  [:text "{skin}" 480 75 {:fill "black" :font-weight "bold" :font-size "11pt" :font-family "Helvetica"}]
+  [:text "HAIR" 630 100 {:fill "black" :font-weight "bold" :font-size "8pt" :font-family "Helvetica"}]
+  [:text "{hair}" 630 75 {:fill "black" :font-weight "bold" :font-size "11pt" :font-family "Helvetica"}]
+
+  [:rect 11 125 252 308 10 10 {:fill "white" :stroke "black"}]
+  [:text "CHARACTER APPEARANCE" 137 308 {:fill "black" :font-weight "bold" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:rect 274 125 514 308 10 10 {:fill "white" :stroke "black"}]
+  [:text "ALLIES &amp; ORGANIZATIONS" 531 308 {:fill "black" :font-weight "bold" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:rect 11 443 252 596 10 10 {:fill "white" :stroke "black"}]
+  [:text "CHARACTER BACKSTORY" 137 1035 {:fill "black" :font-weight "bold" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:rect 274 443 514 298 10 10 {:fill "white" :stroke "black"}]
+  [:text "ADDITIONAL FEATURES &amp; TRAITS" 531 735 {:fill "black" :font-weight "bold" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:rect 274 751 514 288 10 10 {:fill "white" :stroke "black"}]
+  [:text "TREASURE" 531 1035 {:fill "black" :font-weight "bold" :font-size "8pt" :font-family "Helvetica" :text-anchor "middle"}]
+  ]
+ [:pagebreak]
+ [:svg {:under true
+        :width 612
+        :height 792
+        :viewBox "-25 -25 850 1100"}
+  [:rect 0 0 800 1050 {:fill "white" :stroke "black"}]
+  [:rect 10 35 330 50 10 10 {:fill "white" :stroke "black"}]
+  [:rect 320 15 470 90 10 10 {:fill "white" :stroke "black"}]
+  [:text "D&amp;D" 20 30 {:fill "black" :stroke "black" :font-size "16pt" :font-weight "bold" :font-family "Times, serif"}]
+  [:text "{character_name}" 165 67 {:fill "black" :font-weight "bold" :font-size "18pt" :font-family "Helvetica" :text-anchor "middle"}]
+  [:text "CHARACTER NAME" 20 100 {:fill "black" :font-weight "bold" :font-size "8pt" :font-family "Helvetica"}]
+  ]
+ ]
