@@ -41,4 +41,4 @@
               (catch Throwable t
                 (println (.getMessage t))
                 (.printStackTrace t)))]
-    (reset! server (run-server #'app {:port 8080}))))
+    (reset! server (run-server app {:port 8080}))))
