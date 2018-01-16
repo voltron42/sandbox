@@ -1,0 +1,40 @@
+<!ELEMENT schema (root, type+)>
+<!ELEMENT root (array|map|object)>
+<!ELEMENT type (field+)>
+<!ATTLIST type name CDATA #REQUIRED>
+<!ELEMENT field (array|boolean|number|string|map|object)>
+<!ATTLIST field
+    name CDATA #REQUIRED
+    allow-null (true) #IMPLIED
+    >
+<!ELEMENT string ((xml-element|xml-attribute|xml-ignore)?,(json|json-ignore)?)>
+<!ELEMENT boolean ((xml-element|xml-attribute|xml-ignore)?,(json|json-ignore)?)>
+<!ELEMENT number ((xml-element|xml-attribute|xml-ignore)?,(json|json-ignore)?)>
+<!ELEMENT array ((boolean|number|string|map|object),(xml-wrap|xml-element|xml-ignore)?,(json|json-ignore)?)>
+<!ELEMENT map (key-type,value-type,(xml-wrap|xml-element|xml-ignore)?,(json|json-ignore)?)>
+<!ELEMENT key-type (boolean|number|string)>
+<!ELEMENT value-type (array|boolean|number|string|map|object)>
+<!ELEMENT object EMPTY>
+<!ATTLIST object type CDATA #REQUIRED>
+<!ELEMENT xml-element EMPTY>
+<!ATTLIST xml-element
+    label CDATA #IMPLIED
+    show-if-null (true) #IMPLIED
+    >
+<!ELEMENT xml-attribute EMPTY>
+<!ATTLIST xml-attribute
+    label CDATA #IMPLIED
+    show-if-null (true) #IMPLIED
+    >
+<!ELEMENT xml-wrap (xml-element?)>
+<!ATTLIST xml-wrap
+    label CDATA #IMPLIED
+    show-if-null (true) #IMPLIED
+    >
+<!ELEMENT xml-ignore EMPTY>
+<!ELEMENT json EMPTY>
+<!ATTLIST json
+    label CDATA #REQUIRED
+    show-if-null (true) #IMPLIED
+    >
+<!ELEMENT json-ignore EMPTY>

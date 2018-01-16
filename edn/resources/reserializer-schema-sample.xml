@@ -1,0 +1,16 @@
+<!DOCTYPE schema SYSTEM "reserialzer-schema.dtd">
+<schema>
+    <root>
+        <array>
+            <object type="Person"/>
+        </array>
+    </root>
+    <type name="Person">
+        <field name="first-name">
+            <string>
+                <xml-attribute/>
+                <json label="firstName"/>
+            </string>
+        </field>
+    </type>
+</schema>
