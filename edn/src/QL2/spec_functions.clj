@@ -38,3 +38,7 @@
   (fn [value]
     ;todo
     true))
+
+(defn valid-date-format []
+  ;todo
+  string?)

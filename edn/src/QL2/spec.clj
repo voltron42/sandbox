@@ -2,9 +2,11 @@
   (:require [clojure.spec.alpha :as s]
             [QL2.spec-functions :as f]))
 
-(def alias-pattern #"[a-zA-Z][a-zA-Z0-9]*")
+(def alias-pattern #"[a-zA-Z][a-zA-Z0-9]*([_][a-zA-Z][a-zA-Z0-9]*)*")
 
 (def variable-name-pattern #"[a-zA-Z][a-zA-Z0-9]*([-][a-zA-Z][a-zA-Z0-9]*)*")
+
+(def custom-function-name-pattern #"[a-zA-Z][a-zA-Z0-9]*([_][a-zA-Z][a-zA-Z0-9]*)*")
 
 (def column-name-pattern #"[a-zA-Z][a-zA-Z0-9]*([_][a-zA-Z][a-zA-Z0-9]*)*")
 
@@ -68,6 +70,16 @@
                                                                                              :var ::variable-name))))
                                            :query ::query)))
 
+(s/def ::misc-expression (s/or :custom (s/cat :label #{'custom-fn}
+                                              :func-name (f/named-as custom-function-name-pattern)
+                                              :args (s/* (s/or :literal ::literal
+                                                               :var ::variable-name
+                                                               :column ::basic-column)))
+                               :sysdate (s/cat :label #{'sysdate})
+                               :format-date (s/cat :label #{'format-date}
+                                                   :col-name ::basic-column
+                                                   :format-str (f/valid-date-format))))
+
 (s/def ::where (s/or :var ::variable-name
                      :bool ::boolean
                      :column ::basic-column
@@ -76,7 +88,8 @@
                                               :nil ::nil-check
                                               :comp ::comparison
                                               :conj ::conjunction
-                                              :in ::where-in))))
+                                              :in ::where-in
+                                              :misc ::misc-expression))))
 
 (s/def ::literal (s/or :number ::number
                        :string ::string
@@ -90,7 +103,8 @@
 
 (s/def ::column-expression (s/and list?
                                   (s/or :aggr ::aggregate-expression
-                                        :count ::count-expression)))
+                                        :count ::count-expression
+                                        :misc ::misc-expression)))
 
 (s/def ::column-untyped (s/or :var-name ::variable-name
                               :expression ::column-expression))
@@ -109,6 +123,8 @@
   (s/or :basic-column ::basic-column
         :table-star ::table-dot-star
         :aliased ::aliased-column-name
+        :literal ::literal
+        :untyped ::column-untyped
         :expression ::aliased-expression))
 
 (s/def ::select (s/or :single-column ::column
@@ -135,7 +151,8 @@
                                                    (s/map-of ::table-dot-column-name
                                                              ::table-dot-column-name)))))
 
-(s/def ::from (s/or :single ::table
+(s/def ::from (s/or :single (s/or :table ::table
+                                  :aliased ::aliased-table)
                     :join (s/and vector?
                                  (s/cat :first ::aliased-table
                                         :additional (s/+ ::additional-table)))))
