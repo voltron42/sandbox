@@ -7,7 +7,6 @@ MongoFile:
   importSection=XImportSection?
   elements+=AbstractElement*;
 ")
-
 (s/def :domain/mongo-file
   (s/cat :import-section (s/? :common/x-import-section)
          :elements (s/* :domain/abstract-element)))
@@ -16,7 +15,6 @@ MongoFile:
 AbstractElement:
   PackageDeclaration | MongoBean;
 ")
-
 (s/def :domain/abstract-element
   (s/or :pkg-decl :domain/package-declaration
         :mongo-bean :domain/mongo-bean))
@@ -27,10 +25,11 @@ PackageDeclaration:
     elements+=AbstractElement*
   '}';
 ")
-
 (s/def :domain/package-declaration
-  (s/or :package :common/q-name
-        :elements (s/* :common/abstract-element)))
+  (s/or :label #{'package}
+        :package :common/q-name
+        :elements (s/and vector?
+                         (s/coll-of :common/abstract-element))))
 
 (comment "
 MongoBean:
@@ -38,16 +37,15 @@ MongoBean:
     features+=AbstractFeature*
   '}';
 ")
-
 (s/def :domain/mongo-mean
   (s/cat :name :common/valid-id
-         :features (s/* :domain/abstract-feature)))
+         :features (s/and vector?
+                          (s/coll-of :domain/abstract-feature))))
 
 (comment "
 AbstractFeature:
   MongoOperation | MongoProperty;
 ")
-
 (s/def :domain/abstract-feature
   (s/or :operation :domain/mongo-operation
         :property :domain/mongo-property))
@@ -56,7 +54,6 @@ AbstractFeature:
 MongoProperty:
   (type=JvmTypeReference | inlineType=MongoBean) (many?='*')? name=ValidID;
 ")
-
 (s/def :domain/mongo-property
   (s/cat :type (s/or :type :common/jvm-type-ref
                      :inline-type :domain/mongo-bean)
@@ -72,3 +69,9 @@ MongoOperation:
   ')'
   body=XBlockExpression;
 ")
+(s/def :domain/mongo-property
+  (s/cat :return-type :common/jvm-type-ref
+         :name :common/valid-id
+         :parameters (s/and vector?
+                            (s/coll-of :common/full-jvm-formal-param))
+         :body :common/x-block-expression))
