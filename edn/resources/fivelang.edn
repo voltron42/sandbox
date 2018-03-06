@@ -1,0 +1,50 @@
+'{tortoise [[(val :length 150)
+             (val :diagonal (* :length (sqrt 2)))
+             (lineWidth 2)
+             (square :length)
+             (turnRight 45)
+             (lineColor "blue")
+             (forward :diagonal)
+             (turnLeft 90)
+             (lineColor "red")
+             (forward (/ :diagonal 2))
+             (turnLeft 90)
+             (forward (/ :diagonal 2))
+             (turnLeft 90)
+             (lineColor "blue")
+             (forward :diagonal)]
+            [square
+             [int :length]
+             [(for :i (range 1 5)
+                [(forward :length)
+                 (turnRight 90)])]]]
+  routing [[GET ["guess" :theGuess]
+            do (ctrl/handle-guess :theGuess)]
+           [GET ["guess"]
+            do (ctrl/handle-guess (request/query "theGuess"))]
+           [GET []
+            do (ctrl/handle-guess nil)]
+           [POST ["employee"]
+            when (headers {"content-type" "application/json"})
+            do (ctrl/add-employee request/json)]
+           [POST ["employee"]
+            when (headers {"content-type" "application/x-www-form-urlencoded"})
+            do (ctrl/add-employee request/params)]
+           [GET ["employee" :id]
+            do (ctrl/get-employee :id)]
+           [GET ["employees"]
+            do (ctrl/get-employees)]
+           [GET ["employees" :field :value]
+            do (ctrl/get-employees-by :field :value)]
+           [PUT ["employee" :id]
+            when (headers {"content-type" "application/json"})
+            do (ctrl/update-employee :id request/json)]
+           [PUT ["employee" :id]
+            when (headers {"content-type" "application/x-www-form-urlencoded"})
+            do (ctrl/update-employee :id request/params)]
+           [DELETE ["employee" :id]
+            do (ctrl/delete-employee :id)]]
+  template []
+  domain []
+  build []
+  }

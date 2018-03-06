@@ -11,11 +11,11 @@ TemplateFile:
   body=RichString;
 ")
 (s/def :template/template-file
-  (s/cat :label #{'<!--}
-         :package (s/? (s/cat :label #{'package}
+  (s/cat :package (s/? (s/cat :label #{'package}
                               :name :common/q-name))
          :import-section (s/? :common/x-import-section)
-         :params (s/* :template/parameter)
+         :params (s/and vector?
+                        (s/coll-of :template/parameter))
          :body :template/rich-string))
 
 (comment "
@@ -24,11 +24,13 @@ Parameter:
   'param' type=JvmTypeReference? name=ID ('=' defaultexp=XExpression)?;
 ")
 (s/def :template/parameter
-  (s/cat :annotations (s/* :common/x-annotation)
-         :label #{'param}
-         :type (s/? :common/jvm-type-ref)
-         :name :common/id
-         :default-exp (s/? :common/x-expression)))
+  (s/and vector?
+         (s/cat :annotations (s/and vector?
+                                    (s/coll-of :common/x-annotation))
+                :label #{'param}
+                :type (s/? :common/jvm-type-ref)
+                :name :common/id
+                :default-exp (s/? :common/x-expression))))
 
 (comment "
 RichString returns xbase::XBlockExpression:
@@ -37,9 +39,10 @@ RichString returns xbase::XBlockExpression:
   (expressions+=RichStringPart expressions+=RichStringLiteral)*;
 ")
 (s/def :template/rich-string
-  (s/cat :first :template/rich-string-literal
-         :rest (s/* (s/cat :part :template/rich-string-part
-                           :literal :template/rich-string-literal))))
+  (s/and vector?
+         (s/cat :first :template/rich-string-literal
+                :rest (s/* (s/cat :part :template/rich-string-part
+                                  :literal :template/rich-string-literal)))))
 
 (comment "
 RichStringLiteral returns xbase::XStringLiteral:
@@ -54,7 +57,7 @@ RichStringPart returns xbase::XExpression:
   RichStringIf;
 ")
 (s/def :template/rich-string-part
-  (s/or :expression :common/x-expression-inside-block
+  (s/or :expression :common/x-expression
         :for :template/rich-string-for-loop
         :if :template/rich-string-if))
 
@@ -66,11 +69,11 @@ RichStringForLoop returns xbase::XForLoopExpression:
   \"ENDFOR\";
 ")
 (s/def :template/rich-string-for-loop
-  (s/cat :for #{'FOR}
-         :declared-param :common/jvm-formal-parameter
-         :for-expression :common/x-expression
-         :each-expression :template/rich-string
-         :end #{'ENDFOR}))
+  (s/and vector?
+         (s/cat :for #{'FOR}
+                :declared-param :common/jvm-formal-parameter
+                :for-expression :common/x-expression
+                :each-expression :template/rich-string)))
 
 (comment "
 RichStringIf returns xbase::XIfExpression:
@@ -80,15 +83,6 @@ RichStringIf returns xbase::XIfExpression:
   (else=RichStringElseIf | \"ELSE\" else=RichString)?
   \"ENDIF\";
 ")
-(s/def :template/rich-string-if
-  (s/cat :if #{'IF}
-         :test :common/x-expression
-         :then :template/rich-string
-         :else (s/? (s/or :elseif :template/rich-string-else-if
-                          :else (s/cat :label #{'ELSE}
-                                       :else :template/rich-string)))
-         :end #{'ENDIF}))
-
 (comment "
 RichStringElseIf returns xbase::XIfExpression:
   {RichStringIf}
@@ -96,10 +90,14 @@ RichStringElseIf returns xbase::XIfExpression:
   then=RichString
   (else=RichStringElseIf | \"ELSE\" else=RichString)?;
 ")
-(s/def :template/rich-string-else-if
-  (s/cat :label #{'ELSEIF}
-         :if :common/x-expression
-         :then :template/rich-string
-         :else (s/? (s/or :elseif :template/rich-string-else-if
-                          :else (s/cat :label #{'ELSE}
-                                       :else :template/rich-string)))))
+(s/def :template/rich-string-if
+  (s/and vector?
+         (s/cat :label #{'IF}
+                :test :common/x-expression
+                :then :template/rich-string
+                :elseif (s/* (s/cat :label #{'ELSEIF}
+                                    :if :common/x-expression
+                                    :then :template/rich-string))
+                :else (s/? (s/cat :label #{'ELSE}
+                                  :else :template/rich-string)))))
+

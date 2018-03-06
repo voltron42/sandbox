@@ -9,8 +9,9 @@ Model :
   declarations+=AbstractDeclaration*;
 ")
 (s/def :routing/model
-  (s/cat :import-section (s/? :common/x-import-section)
-         :declarations (s/* :routing/abstract-declaration)))
+  (s/and vector?
+         (s/cat :import-section (s/? :common/x-import-section)
+                :declarations (s/* :routing/abstract-declaration))))
 
 (comment "
 AbstractDeclaration :
@@ -25,10 +26,11 @@ Dependency :
   'inject' annotations+=XAnnotation? type=JvmTypeReference name=ID;
 ")
 (s/def :routing/dependency
-  (s/cat :label #{'inject}
-         :annotations (s/* :common/x-annotation)
-         :type :common/jvm-type-ref
-         :name :common/id))
+  (s/and vector?
+         (s/cat :label #{'inject}
+                :annotations (s/* :common/x-annotation)
+                :type :common/jvm-type-ref
+                :name :common/id)))
 
 (comment "\n
 Route :
@@ -37,12 +39,13 @@ Route :
   'do' call=XExpression;
 ")
 (s/def :routing/route
-  (s/cat :request-type :routing/request-type
-         :url :routing/url
-         :when (s/? (s/cat :label #{'when}
-                           :condition :common/x-expression))
-         :do (s/cat :label #{'do}
-                    :call :common/x-expression)))
+  (s/and vector?
+         (s/cat :request-type :routing/request-type
+                :url :routing/url
+                :when (s/? (s/cat :label #{'when}
+                                  :condition :common/x-expression))
+                :do (s/cat :label #{'do}
+                           :call :common/x-expression))))
 
 (comment "\n
 enum RequestType :

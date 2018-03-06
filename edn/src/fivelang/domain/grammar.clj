@@ -29,7 +29,7 @@ PackageDeclaration:
   (s/or :label #{'package}
         :package :common/q-name
         :elements (s/and vector?
-                         (s/coll-of :common/abstract-element))))
+                         (s/coll-of :domain/abstract-element))))
 
 (comment "
 MongoBean:
