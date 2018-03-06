@@ -34,7 +34,7 @@ Body returns XBlockExpression:
 ")
 (s/def :tortoise/body
   (s/and vector?
-         (s/coll-of :common/x-expression)))
+         (s/coll-of :common/x-expression-inside-block)))
 
 (comment "
 Executable:

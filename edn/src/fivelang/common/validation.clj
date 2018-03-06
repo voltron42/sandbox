@@ -27,6 +27,14 @@
        (catch Throwable t
          false)))))
 
+(defn verify-arity [func-map]
+  ;todo
+  )
+
+(def procedures {}) ;todo
+
+(def functions {}) ;todo
+
 (def ID #"[a-zA-Z$_][a-zA-Z$_0-9]*")
 
 (def valid-id ID)
