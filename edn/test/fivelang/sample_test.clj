@@ -13,9 +13,9 @@
 (deftest test-sample
   (let [{:keys [tortoise routing domain build import]} (edn/read-string (slurp "resources/fivelang.edn"))
         tortoise-data (s/explain-data :tortoise/program tortoise)
-        routing-data (s/explain-data :routing/model routing)
+        routing-data (s/explain-data :routing/abstract-declarations routing)
         domain-data (s/explain-data :domain/mongo-file domain)
-        build-data (s/explain-data :build/build-file build)
+        build-data (s/explain-data :build/declarations build)
         import-data (s/explain-data :common/x-import-section import)
         ]
     (println (pr-str tortoise-data))

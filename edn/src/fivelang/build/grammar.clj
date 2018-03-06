@@ -14,15 +14,15 @@ declarations+=Declaration*;
                                           (s/cat :label #{'package}
                                                  :name :common/q-name)))
                 :import-section :common/x-import-section
-                :declarations (s/* :build/declaration))))
+                :declarations :build/declarations)))
 
 (comment "
 Declaration:
 Task | Parameter;
 ")
-(s/def :build/declaration
-         (s/or :task :build/task
-               :parameter :build/parameter))
+(s/def :build/declarations
+  (s/* (s/or :task :build/task
+             :parameter :build/parameter)))
 
 (comment "
 Parameter:

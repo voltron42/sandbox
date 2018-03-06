@@ -11,15 +11,15 @@ Model :
 (s/def :routing/model
   (s/and vector?
          (s/cat :import-section :common/x-import-section
-                :declarations (s/* :routing/abstract-declaration))))
+                :declarations :routing/abstract-declarations)))
 
 (comment "
 AbstractDeclaration :
   Dependency | Route;
 ")
-(s/def :routing/abstract-declaration
-  (s/or :dependency :routing/dependency
-        :route :routing/route))
+(s/def :routing/abstract-declarations
+  (s/* (s/or :dependency :routing/dependency
+             :route :routing/route)))
 
 (comment "\n
 Dependency :
@@ -66,8 +66,7 @@ URL :
 ")
 (s/def :routing/url
   (s/and vector?
-         (v/min-count 1)
-         (s/coll-of (s/or :q-name :common/q-name
+         (s/coll-of (s/or :q-name (s/and string? (v/matches? qualified-name))
                           :var :routing/variable))))
 
 (comment "

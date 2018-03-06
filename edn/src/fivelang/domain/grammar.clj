@@ -9,7 +9,7 @@ MongoFile:
 ")
 (s/def :domain/mongo-file
   (s/and vector?
-         (s/cat :import-section (s/? :common/x-import-section)
+         (s/cat :import-section :common/x-import-section
                 :elements :domain/abstract-element)))
 
 (comment "
