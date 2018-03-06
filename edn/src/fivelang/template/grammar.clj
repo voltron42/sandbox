@@ -25,11 +25,11 @@ Parameter:
 ")
 (s/def :template/parameter
   (s/and vector?
-         (s/cat :annotations (s/and vector?
-                                    (s/coll-of :common/x-annotation))
+         (s/cat :annotations (s/? (s/and vector?
+                                         (s/coll-of :common/x-annotation)))
                 :label #{'param}
-                :type (s/? :common/jvm-type-ref)
                 :name :common/id
+                :type (s/? :common/jvm-type-ref)
                 :default-exp (s/? :common/x-expression))))
 
 (comment "

@@ -10,7 +10,7 @@ Model :
 ")
 (s/def :routing/model
   (s/and vector?
-         (s/cat :import-section (s/? :common/x-import-section)
+         (s/cat :import-section :common/x-import-section
                 :declarations (s/* :routing/abstract-declaration))))
 
 (comment "
@@ -76,4 +76,4 @@ Variable :
 ")
 (s/def :routing/variable
   (s/and keyword?
-         (v/named-as v/ID)))
+         (v/named-as ID)))

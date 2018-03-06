@@ -8,16 +8,17 @@ MongoFile:
   elements+=AbstractElement*;
 ")
 (s/def :domain/mongo-file
-  (s/cat :import-section (s/? :common/x-import-section)
-         :elements (s/* :domain/abstract-element)))
+  (s/and vector?
+         (s/cat :import-section (s/? :common/x-import-section)
+                :elements :domain/abstract-element)))
 
 (comment "
 AbstractElement:
   PackageDeclaration | MongoBean;
 ")
 (s/def :domain/abstract-element
-  (s/or :pkg-decl :domain/package-declaration
-        :mongo-bean :domain/mongo-bean))
+  (s/keys :opt-un [:domain/packages
+                   :domain/beans]))
 
 (comment "
 PackageDeclaration:
@@ -25,11 +26,9 @@ PackageDeclaration:
     elements+=AbstractElement*
   '}';
 ")
-(s/def :domain/package-declaration
-  (s/or :label #{'package}
-        :package :common/q-name
-        :elements (s/and vector?
-                         (s/coll-of :domain/abstract-element))))
+(s/def :domain/packages
+  (s/map-of :common/q-name
+            :domain/abstract-element))
 
 (comment "
 MongoBean:
@@ -37,28 +36,37 @@ MongoBean:
     features+=AbstractFeature*
   '}';
 ")
-(s/def :domain/mongo-mean
-  (s/cat :name :common/valid-id
-         :features (s/and vector?
-                          (s/coll-of :domain/abstract-feature))))
+(s/def :domain/beans
+  (s/map-of :common/valid-id
+            :domain/bean))
 
+(s/def :domain/bean
+  (s/map-of :commmon/valid-id
+            :domain/abstract-feature))
 (comment "
 AbstractFeature:
   MongoOperation | MongoProperty;
 ")
 (s/def :domain/abstract-feature
-  (s/or :operation :domain/mongo-operation
-        :property :domain/mongo-property))
+  (s/map-of :common/valid-id
+            (s/or :operation :domain/mongo-operation
+                  :property :domain/mongo-property)))
 
 (comment "
 MongoProperty:
   (type=JvmTypeReference | inlineType=MongoBean) (many?='*')? name=ValidID;
 ")
 (s/def :domain/mongo-property
-  (s/cat :type (s/or :type :common/jvm-type-ref
-                     :inline-type :domain/mongo-bean)
-         :many? (s/? '#{*})
-         :name :commmon/valid-id))
+  (s/or :type :common/jvm-type-ref
+        :many-type (s/and list?
+                          (s/cat :label #{'*}
+                                 :type :common/jvm-type-ref))
+        :inline-type (s/and vector?
+                            (s/cat :type-name (s/or :type :common/valid-id
+                                                    :many-type (s/and list?
+                                                                      (s/cat :label #{'*}
+                                                                             :type :common/valid-id)))
+                                   :body :domain/bean))))
 
 (comment "
 MongoOperation:
@@ -71,7 +79,5 @@ MongoOperation:
 ")
 (s/def :domain/mongo-property
   (s/cat :return-type :common/jvm-type-ref
-         :name :common/valid-id
-         :parameters (s/and vector?
-                            (s/coll-of :common/full-jvm-formal-param))
+         :parameters (s/* :common/full-jvm-formal-param)
          :body :common/x-block-expression))

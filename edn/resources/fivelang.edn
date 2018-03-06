@@ -1,4 +1,4 @@
-'{tortoise [[(val :length 150)
+{:tortoise [[(val :length 150)
              (val :diagonal (* :length (sqrt 2)))
              (lineWidth 2)
              (square :length)
@@ -13,12 +13,13 @@
              (turnLeft 90)
              (lineColor "blue")
              (forward :diagonal)]
-            [square
-             [int :length]
+            [square void
+             [length int]
              [(for :i (range 1 5)
-                [(forward :length)
+                [(forward length)
                  (turnRight 90)])]]]
-  routing [[GET ["guess" :theGuess]
+  :routing [[import a]
+            [GET ["guess" :theGuess]
             do (ctrl/handle-guess :theGuess)]
            [GET ["guess"]
             do (ctrl/handle-guess (request/query "theGuess"))]
@@ -44,7 +45,38 @@
             do (ctrl/update-employee :id request/params)]
            [DELETE ["employee" :id]
             do (ctrl/delete-employee :id)]]
-  template []
-  domain []
-  build []
+  :template []
+  :domain [{org.musicdb
+            {Artist {name String
+                     albums (* Album)
+                     getOevre [Iterable<Track>
+                               [(flatten (map tracks albums))]]}
+             Album {title String
+                    year int
+                    getDuration [Duration
+                                 [(sum (map seconds tracks))]]
+                    tracks [(* Track)
+                            {title String
+                             seconds int
+                             getDuration [Duration
+                                          [(new Duration seconds)]]}]}}}]
+  :build [[import a]
+          [param File :project (new File "example-project")]
+          [param File :source (new File :project "src")]
+          [param File :target (new File :project "target")]
+          [param File :jar (new File :project "result" "foo.jar")]
+          [task Zip depends Compile
+           [(zip :target :jar)]]
+          [task Compile depends Clean
+           [(javac
+              [(add-source :source)
+               (set-destination :target)])]]
+          [task Run depends Zip
+           [(val :classpath (new Classpath :jar))
+            (val :clazz (load-class :classpath "helloworld.HelloWorld"))
+            (run-main :clazz)]]
+          [task Clean
+           [(delete-directory-contents :target)
+            (delete :jar)]]]
+ :import []
   }
