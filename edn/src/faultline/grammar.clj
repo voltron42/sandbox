@@ -14,7 +14,7 @@
 (s/def :config/value
   (s/or :complex (s/and list?
                         (s/or :file (s/cat :label #{'file}
-                                           :type '#{xml json text}
+                                           :type '#{xml json text yaml csv}
                                            :file-name :fault/templated-string)
                               :json (s/cat :label #{'json}
                                            :body :body/json)
@@ -22,10 +22,10 @@
                                           :body :body/xml)
                               :plain-text (s/cat :label #{'text}
                                                  :body :fault/templated-string)))
+        :variable :fault/variable
         :text string?
         :number number?
-        :boolean boolean?
-        :variable :fault/variable))
+        :boolean boolean?))
 
 (def valid-name #"[a-zA-Z][a-zA-Z0-9_-$?]*")
 
@@ -113,6 +113,66 @@
 (s/def :test/pre (s/and
                    (s/keys :opt-un [:fault/configs :pre/db])
                    (v/min-count 1)))
+
+(s/def :pre/db (s/keys :opt-un [:db/config :db/load]))
+
+(s/def :db/config (s/keys :req-un [:db/classname :db/url :db/username :db/password :db/max-pool-size :db/pool-provider :db/table-keys]))
+
+(s/def :db/classname string?)
+
+(s/def :db/url string?)
+
+(s/def :db/username string?)
+
+(s/def :db/password string?)
+
+(s/def :db/max-pool-size int?)
+
+(s/def :db/pool-provider #{"hikari" "tomcat" "c3p0"})
+
+(s/def :db/table-keys (s/map-of :db/entity-name
+                                (s/or :single :db/entity-name
+                                      :multi (s/and vector?
+                                                    (v/min-count 1)
+                                                    (s/coll-of :db/entity-name)))))
+
+(s/def :db/entity-name (s/and symbol? (v/named-as #"[a-zA-Z][a-zA-Z0-9_-$]*")))
+
+(s/def :db/record (s/map-of :db/entity-name (s/or :text string?
+                                                  :var :fault/variable)))
+
+(s/def :db/load (s/or
+                  :variable :fault/variable
+                  :tables (s/or :file :file/not-csv
+                                :tables (s/map-of :db/entity-name
+                                                  (s/or :file :file/with-csv
+                                                        :variable :fault/variable
+                                                        :records (s/or :single :db/record
+                                                                       :multi (s/and vector?
+                                                                                     (s/coll-of :db/record)))
+                                                        :sample (s/and list?
+                                                                       (s/cat :label #{'sample}
+                                                                              :data :load/sample)))))
+                  :sample (s/and list?
+                                 (s/cat :label #{'sample}
+                                        :data (s/or :file :file/not-csv
+                                                    :raw (s/map-of :db/entity-name
+                                                                   :load/sample))))))
+
+(s/def :load/sample (s/or :file :file/with-csv
+                          :raw (s/map-of :db/entity-name
+                                         (s/and set?
+                                                (s/coll-of string?)))))
+
+(s/def :file/not-csv (s/and list?
+                            (s/cat :label #{'file}
+                                   :type '#{json edn yaml}
+                                   :file-name :fault/templated-string)))
+
+(s/def :file/with-csv (s/and list?
+                            (s/cat :label #{'file}
+                                   :type '#{json edn yaml csv}
+                                   :file-name :fault/templated-string)))
 
 (s/def :test/post
   ;todo
